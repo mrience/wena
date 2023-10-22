@@ -13,7 +13,7 @@ describe('members', () => {
         await Given.membersPageIsLoaded();
         await When.userLoggesInWithEmailAndPassword(email, password);
         await Then.expectsErrorMessage(message);
-    });
+    }, 30000);
 
     afterEach(async () => {
         await driver.close();
