@@ -1,0 +1,5 @@
+wena-framework/node_modules
+wena-tests/node_modules
+dist/
+/workspace.xml
+*.js
