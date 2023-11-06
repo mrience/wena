@@ -1,0 +1,29 @@
+{
+  "name": "wena",
+  "version": "1.0.7",
+  "description": "Serverless e2e tests framework",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --build --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrience/wena.git"
+  },
+  "author": "mrience",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrience/wena/issues"
+  },
+  "homepage": "https://github.com/mrience/wena#readme",
+  "workspaces": [
+    "packages/wena-test-runner"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "eslint": "^8.52.0",
+    "typescript": "^5.2.2"
+  }
+}

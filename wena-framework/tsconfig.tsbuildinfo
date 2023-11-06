@@ -1,0 +1,24 @@
+{
+  "program": {
+    "fileInfos": {},
+    "options": {
+      "incremental": true,
+      "target": 4,
+      "module": 6,
+      "declaration": true,
+      "strict": true,
+      "moduleResolution": 2,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "rootDir": "/Users/mateusz/git/wena/wena-framework/src",
+      "outDir": "/Users/mateusz/git/wena/wena-framework/dist",
+      "types": [],
+      "configFilePath": "/Users/mateusz/git/wena/wena-framework/tsconfig.json"
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": []
+  },
+  "version": "3.4.5"
+}

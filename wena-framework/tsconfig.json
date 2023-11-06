@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "incremental": true,
+      "target": "es2017",
+      "module": "esnext",
+      "declaration": true,
+      "strict": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "rootDir": "./src",
+      "outDir": "./dist",
+      "types": []
+    },
+    "include": ["src/**/*"],
+    "references": [
+      {
+        "path": "./packages/wena-test-runner"
+      }
+    ]
+  }

@@ -16,5 +16,6 @@
     "globals": {
         "ethers": "readonly"
     },
-    "plugins": ["@typescript-eslint"]
+    "plugins": ["@typescript-eslint"],
+    "ignorePatterns": ["**/dist/**", "**/node_modules/**"]
 }
