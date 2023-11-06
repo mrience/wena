@@ -1,0 +1,15 @@
+
+name:
+
+description:
+
+inputs:
+
+
+runs:
+  using: "composite"
+
+# create link for wena-test-runner
+
+# run wena-test-runner from wena-tests
+

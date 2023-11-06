@@ -1,0 +1,9 @@
+name:
+
+description: "Sets up environment for typescript"
+
+inputs:
+
+
+runs:
+  using: "composite"
