@@ -28,7 +28,7 @@ jobs:
 
     - run: npm link
 
-    - run: ../wena-tests
+    - run: cd ../wena-tests
 
     - run: npm ci
 
