@@ -2,7 +2,7 @@
   "name": "wena-test-runner",
   "version": "1.0.0",
   "description": "This package is responsible for building executable enabling wena-test-runner command",
-  "main": "index.js",
+  "main": "dist/bin.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
