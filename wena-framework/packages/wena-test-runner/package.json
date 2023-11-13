@@ -1,5 +1,5 @@
 {
-  "name": "@mrience/wena-test-runner",
+  "name": "wena-test-runner",
   "version": "1.0.0",
   "description": "This package is responsible for building executable enabling wena-test-runner command",
   "main": "index.js",
