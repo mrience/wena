@@ -32,6 +32,8 @@ jobs:
 
     - run: npm ci
 
+    - run: npm link wena-test-runner
+
     - run: wena-test-runner
 
     - run: npm publish
