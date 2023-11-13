@@ -29,8 +29,8 @@ jobs:
     - run: npm link
 
     - run: |
-      cd ..
-      cd ..
+        cd ..
+        cd ..
 
     - run: npm link wena-test-runner
 
