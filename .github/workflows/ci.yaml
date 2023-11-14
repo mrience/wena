@@ -24,11 +24,9 @@ jobs:
 
     - run: npm run build
 
-    - run: npm link
-
     - run: cd packages/wena-test-runner
 
-    - run: npm link wena-test-runner
+    - run: npm link
 
     - run: |
         cd ..
@@ -37,6 +35,8 @@ jobs:
     - run: cd wena-tests
 
     - run: npm ci
+    
+    - run: npm link wena-test-runner
 
     - run: wena-test-runner
 
