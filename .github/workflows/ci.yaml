@@ -32,6 +32,8 @@ jobs:
 
     - run: cd ..
 
+    - run: cd ..
+
     - run: cd wena-tests
 
     - run: npm ci
