@@ -19,11 +19,11 @@ jobs:
     - run: pwd
     - run: ls
 
-    - run: cd wena-framework
+    - run: cd "wena-framework"
 
     - run: pwd
     - run: ls
-    
+
     - name: Install dependencies
       run: npm ci --workspaces true
 
