@@ -17,11 +17,13 @@ jobs:
         registry-url: https://npm.pkg.github.com/
 
     - run: pwd
+    - run: ls
 
     - run: cd wena-framework
 
     - run: pwd
-
+    - run: ls
+    
     - name: Install dependencies
       run: npm ci --workspaces true
 
