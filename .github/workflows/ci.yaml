@@ -6,11 +6,10 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
-  defaults:
-    run:
-      working-directory: ./wena-framework
+    defaults:
+      run:
+        working-directory: ./wena-framework
     
-
     steps:
     - uses: actions/checkout@v4
     
