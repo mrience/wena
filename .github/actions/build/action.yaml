@@ -13,5 +13,5 @@ runs:
 
     - run: |
       cd wena-framework
-      run: npm ci --workspaces true
+      npm ci --workspaces true
       npm run build
