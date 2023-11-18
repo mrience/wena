@@ -1,18 +1,17 @@
-name:
+name: build
 
-description: "Sets up environment for typescript"
+description: "Sets up Node and builds Typescript"
 
 runs:
   using: "composite"
+  steps:
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        registry-url: https://npm.pkg.github.com/
 
-steps:
-  - name: Use Node.js
-    uses: actions/setup-node@v3
-    with:
-      node-version: 16
-      registry-url: https://npm.pkg.github.com/
-
-    - run: |
-      cd wena-framework
-      run: npm ci --workspaces true
-      npm run build
+      - run: |
+        cd wena-framework
+        run: npm ci --workspaces true
+        npm run build
