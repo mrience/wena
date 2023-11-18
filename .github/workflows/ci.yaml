@@ -4,24 +4,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v4
     
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-        registry-url: https://npm.pkg.github.com/
-
-    - run: cd wena-framework
-
-    - name: Install dependencies
-      run: npm ci --workspaces true
-
-    - run: npm run build
+    - uses: ./.github/actions/build
 
     - run: cd packages/wena-test-runner
 
