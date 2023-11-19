@@ -12,7 +12,10 @@ jobs:
     
     - uses: ./.github/actions/build
 
-    - run: cd packages/wena-test-runner
+    - run: |
+      pwd
+      ls
+      cd packages/wena-test-runner
 
     - run: npm link
 
