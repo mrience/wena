@@ -17,10 +17,10 @@ jobs:
         npm link
 
     - run: |
-      cd wena-tests
-      npm ci
-      npm link wena-test-runner
-      wena-test-runner
+        cd wena-tests
+        npm ci
+        npm link wena-test-runner
+        wena-test-runner
 
     - run: npm publish
       env:
