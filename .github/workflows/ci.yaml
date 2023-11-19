@@ -13,24 +13,14 @@ jobs:
     - uses: ./.github/actions/build
 
     - run: |
-        pwd
-        ls
         cd wena-framework/packages/wena-test-runner
-        pwd
         npm link
 
-
-    - run: cd .. && cd .. & cd ..
-
-    - run: pwd && ls
-
-    - run: cd wena-tests
-
-    - run: npm ci
-    
-    - run: npm link wena-test-runner
-
-    - run: wena-test-runner
+    - run: |
+      cd wena-tests
+      npm ci
+      npm link wena-test-runner
+      wena-test-runner
 
     - run: npm publish
       env:
