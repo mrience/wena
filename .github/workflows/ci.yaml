@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - uses: ./.github/actions/build
 
     - run: |
         pwd
         ls
-        cd packages/wena-test-runner
+        cd wena-framework/packages/wena-test-runner
 
     - run: npm link
 
