@@ -16,8 +16,9 @@ jobs:
         pwd
         ls
         cd wena-framework/packages/wena-test-runner
+        pwd
+        npm link
 
-    - run: npm link
 
     - run: cd .. && cd .. & cd ..
 
