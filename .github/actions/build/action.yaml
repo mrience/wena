@@ -11,7 +11,8 @@ runs:
         node-version: 16
         registry-url: https://npm.pkg.github.com/
 
-    - run: |
+    - name: Build typescript
+      run: |
         cd wena-framework
         npm ci --workspaces true
         npm run build
