@@ -12,6 +12,6 @@ runs:
         registry-url: https://npm.pkg.github.com/
 
     - run: |
-      cd wena-framework
-      npm ci --workspaces true
-      npm run build
+        cd wena-framework
+        npm ci --workspaces true
+        npm run build
