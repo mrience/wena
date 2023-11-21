@@ -13,11 +13,19 @@ jobs:
     - uses: ./.github/actions/build
 
     - run: |
+        #!/bin/bash
+        if [ -e ./wena-framework/packages/wena-test-runner/dist/bin.js ]
+        then
+          echo "ok"
+        else
+          echo "nok"
+        fi
+
+    - run: |
         cd wena-framework/packages/wena-test-runner
         npm link
-        cd ..
-        cd ..
-        cd ..
+
+    - run: |
         cd wena-tests
         npm ci
         npm link wena-test-runner
