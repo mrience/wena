@@ -20,6 +20,8 @@ jobs:
         cd wena-framework/packages/wena-test-runner
         npm link
 
+    - run: sudo -s
+
     - run: |
         cd wena-tests
         npm ci
