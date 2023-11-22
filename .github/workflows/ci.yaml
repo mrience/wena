@@ -10,16 +10,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - uses: ./.github/actions/build
+    - uses: browser-actions/setup-chrome@v1
+    - run: chrome --version
 
-    - run: |
-        #!/bin/bash
-        if [ -e ./wena-framework/packages/wena-test-runner/dist/bin.js ]
-        then
-          echo "ok"
-        else
-          echo "nok"
-        fi
+    - name: Build Typescript
+      uses: ./.github/actions/build
 
     - run: |
         cd wena-framework/packages/wena-test-runner
