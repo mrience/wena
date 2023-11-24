@@ -1,10 +1,9 @@
-import {By, until} from "selenium-webdriver";
+import { By } from "selenium-webdriver";
 import { driver } from "../driver";
 
 
 const type = async(selector: string, text: string) => {
     const element = driver.findElement(By.css(selector));
-    await driver.wait(until.elementIsVisible, 30000);
     await element.clear();
     await element.sendKeys(text);
 }

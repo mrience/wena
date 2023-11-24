@@ -26,6 +26,9 @@ jobs:
         npm link wena-test-runner
         wena-test-runner
 
-    - run: npm publish
+    - name: Publish npm package
+    run: |
+    cd wena-framework
+    npm publish
       env:
         NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
