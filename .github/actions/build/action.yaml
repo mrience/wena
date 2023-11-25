@@ -10,6 +10,7 @@ runs:
       with:
         node-version: 16
         registry-url: https://npm.pkg.github.com/
+        scope: '@mrience'
 
     - name: Build
       shell: bash

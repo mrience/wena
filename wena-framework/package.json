@@ -14,7 +14,7 @@
   "author": "mrience",
   "license": "ISC",
   "publishConfig": {
-    "@mrience:registry": "https://npm.pkg.github.com"
+    "@mrience:registry": "https://npm.pkg.github.com/@mrience/wena"
   },
   "bugs": {
     "url": "https://github.com/mrience/wena/issues"
