@@ -14,9 +14,7 @@ jobs:
   publish_wena_test_runner:
     runs-on: ubuntu-latest
     needs: [wena_e2e_tests]
-    permissions:
-      contents: read
-      packages: write
+    permissions: write-all
 
     steps:
     - uses: actions/checkout@v4
@@ -24,6 +22,8 @@ jobs:
       uses: ./.github/actions/build
     - name: Publish npm package
       run: |
+        echo "@mrience:registry=https://npm.pkg.github.com" >> .npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
         cd wena-framework
         npm publish
       env:
