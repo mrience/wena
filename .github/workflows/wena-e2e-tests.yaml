@@ -1,0 +1,7 @@
+name: Wena e2e tests
+
+
+on:
+  workflow_call:
+
+  workflow_dispatch:
