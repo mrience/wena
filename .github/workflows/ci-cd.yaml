@@ -9,7 +9,7 @@ on:
 jobs:
   wena_e2e_tests:
     name: "E2e tests"
-    uses: wena/.github/workflows/wena-e2e-tests.yaml@master
+    uses: mrience/wena/.github/workflows/wena-e2e-tests.yaml@master
 
   publish_wena_test_runner:
     runs-on: ubuntu-latest
