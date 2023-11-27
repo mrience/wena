@@ -18,27 +18,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    # - name: Build Typescript
-      # uses: ./.github/actions/build
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-        registry-url: https://npm.pkg.github.com/
-        scope: '@mrience'
-
-    - name: Build
-      shell: bash
-      run: |
-        cd wena-framework
-        npm ci --workspaces true
-        npm run build
+    - name: Build Typescript
+      uses: ./.github/actions/build
 
     - name: Publish npm package
       run: |
-        echo "@mrience:registry=https://npm.pkg.github.com" >> .npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
         cd wena-framework
         npm publish
       env:
