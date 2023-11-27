@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  wena_e2e_tests:
+    name: "E2e tests"
+    uses: wena/.github/workflows/wena-e2e-tests.yaml@master
+
+  publish_wena_test_runner:
+    runs-on: ubuntu-latest
+    needs: [wena_e2e_tests]
+    permissions: write-all
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Publish npm package
+      run: |
+        cd wena-framework
+        npm publish
+      env:
+        NODE_AUTH_TOKEN: §${{secrets.GITHUB_TOKEN}}

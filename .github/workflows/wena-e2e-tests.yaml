@@ -1,32 +1,26 @@
-name: ci
+name: Wena e2e tests
+
 
 on:
+  workflow_call:
   workflow_dispatch:
 
 jobs:
-  ci:
+  wena-e2e-tests:
     runs-on: ubuntu-latest
-    
-    permissions: write-all
 
     steps:
     - uses: actions/checkout@v4
-    
     - uses: browser-actions/setup-chrome@v1
-    - run: chrome --version
-
     - name: Build Typescript
       uses: ./.github/actions/build
-
-    - run: |
+    - name: Link wena-test-runner
+      run: |
         cd wena-framework/packages/wena-test-runner
         npm link
-
-
-
-    - name: Publish npm package
+    - name: Run wena-test-runner
       run: |
-        cd wena-framework
-        npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        cd wena-tests
+        npm ci
+        npm link wena-test-runner
+        wena-test-runner
