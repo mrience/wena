@@ -18,6 +18,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Build Typescript
+      uses: ./.github/actions/build
     - name: Publish npm package
       run: |
         cd wena-framework
