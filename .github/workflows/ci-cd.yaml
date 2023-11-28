@@ -8,7 +8,7 @@ on:
 jobs:
   wena_e2e_tests:
     name: "E2e tests"
-    uses: mrience/wena/.github/workflows/wena-e2e-tests.yaml@feature-003/setup-github-actions
+    uses: mrience/wena/.github/workflows/wena-e2e-tests.yaml@main
 
   publish_wena_test_runner:
     runs-on: ubuntu-latest
