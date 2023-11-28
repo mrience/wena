@@ -1,6 +1,6 @@
 {
   "name": "@mrience/wena",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Serverless e2e tests framework",
   "main": "index.js",
   "type": "module",

@@ -5,5 +5,3 @@ dist/
 /workspace.xml
 *.js
 wena-framework/packages/wena-test-runner/tsconfig.tsbuildinfo
-wena-tests/.env
-wena-tests/.npmrc
