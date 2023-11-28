@@ -2,5 +2,5 @@
 import {$} from 'execa';
 
 const $$ = $({verbose: true, stdio:'inherit'});
-await $$`jest`;
 
+await $$`jest`;

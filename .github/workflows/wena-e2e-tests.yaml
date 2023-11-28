@@ -1,7 +1,25 @@
 name: Wena e2e tests
 
-
 on:
   workflow_call:
-
   workflow_dispatch:
+
+jobs:
+  wena-e2e-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: browser-actions/setup-chrome@v1
+    - name: Build Typescript
+      uses: ./.github/actions/build
+    - name: Link wena-test-runner
+      run: |
+        cd wena-framework/packages/wena-test-runner
+        npm link
+    - name: Run wena-test-runner
+      run: |
+        cd wena-tests
+        npm ci
+        npm link wena-test-runner
+        wena-test-runner

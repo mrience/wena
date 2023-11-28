@@ -1,4 +1,3 @@
-// import webdriver from "selenium-webdriver";
 import { Given, Then, When } from "../pages/members-page";
 import data from '../data/members.json';
 import { init, driver } from "../driver";

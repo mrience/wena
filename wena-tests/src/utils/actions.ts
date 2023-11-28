@@ -1,4 +1,4 @@
-import {By} from "selenium-webdriver";
+import { By } from "selenium-webdriver";
 import { driver } from "../driver";
 
 

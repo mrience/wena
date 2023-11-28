@@ -1,5 +1,7 @@
 wena-framework/node_modules
+wena-framework/tsconfig/tsbuildinfo
 wena-tests/node_modules
 dist/
 /workspace.xml
 *.js
+wena-framework/packages/wena-test-runner/tsconfig.tsbuildinfo
