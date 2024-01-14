@@ -1,0 +1,4 @@
+name: cdk-deployment
+
+on:
+  workflow-dispatch:
