@@ -3,11 +3,12 @@ name: ci cd
 on:
   push:
     branches: [ main ]
+    paths: wena-framework/**
   workflow_dispatch:
 
 jobs:
   wena_e2e_tests:
-    name: "E2e tests"
+    - name: "E2e tests"
     uses: mrience/wena/.github/workflows/wena-e2e-tests.yaml@main
 
   publish_wena_test_runner:
