@@ -1,8 +1,6 @@
 import { App } from "aws-cdk-lib";
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { FrontendLambdaStack } from "../../src/stacks/frontend-lambda-stack";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { join } from "path";
 
 describe("Lambs stack", () => {
     let template: Template;
