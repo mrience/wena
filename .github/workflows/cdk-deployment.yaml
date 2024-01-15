@@ -1,6 +1,9 @@
 name: cdk deployment
 
 on:
+  push:
+    branches: [ main ]
+    paths: wena-infra/**
   workflow_dispatch:
 
 jobs:
