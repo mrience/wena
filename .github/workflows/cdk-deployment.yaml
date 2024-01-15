@@ -28,6 +28,7 @@ jobs:
           AWS_DEFAULT_REGION: 'eu-west-1'
       - name: Test CDK template
         run: npm run tests
+        working-directory: wena-infra
 
       # - name: cdk deploy
       #   uses: youyo/aws-cdk-github-actions@v2
