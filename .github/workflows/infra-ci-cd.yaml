@@ -32,7 +32,7 @@ jobs:
       - name: cdk deploy
         uses: youyo/aws-cdk-github-actions@v2
         with:
-          cdk_subcommand: 'deploy --all'
+          cdk_subcommand: 'deploy'
           cdk_args: '--require-approval never'
           actions_comment: false
           working_dir: 'wena-infra'
