@@ -1,3 +1,7 @@
+name: cdk-deployment
+
+on:
+  workflow_dispatch:
 name: infra ci cd
 
 on:
