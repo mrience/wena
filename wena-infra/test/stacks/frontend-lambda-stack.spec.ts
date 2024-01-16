@@ -16,7 +16,6 @@ describe("Lambs stack", () => {
         const frontendLambdaMatching = expect.stringMatching(/FrontendLambda.*/);
 
         expect(Object.keys(resources)).toContainEqual(frontendLambdaMatching);
-
     });
 
     it('should have props frontend lambda', () => {
