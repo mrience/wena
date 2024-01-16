@@ -2,3 +2,46 @@ name: cdk-deployment
 
 on:
   workflow_dispatch:
+name: infra ci cd
+
+on:
+  push:
+    branches: [ main ]
+    paths: wena-infra/**
+  workflow_dispatch:
+
+jobs:
+  deploy_aws_stacks:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: cdk synth
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'synth'
+          cdk_version: '2.121.1'
+          working_dir: 'wena-infra'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-west-1'
+      - name: Test CDK template
+        run: npm run test
+        working-directory: wena-infra
+      - name: cdk deploy
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'deploy --all'
+          cdk_args: '--require-approval never'
+          actions_comment: false
+          working_dir: 'wena-infra'
+          cdk_version: '2.121.1'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-west-1'

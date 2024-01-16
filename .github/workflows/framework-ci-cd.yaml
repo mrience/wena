@@ -3,6 +3,7 @@ name: framework ci cd
 on:
   push:
     branches: [ main ]
+    paths: wena-framework/**
   workflow_dispatch:
 
 jobs:
