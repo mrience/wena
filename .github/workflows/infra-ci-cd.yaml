@@ -1,4 +1,4 @@
-name: cdk deployment
+name: infra ci cd
 
 on:
   push:
