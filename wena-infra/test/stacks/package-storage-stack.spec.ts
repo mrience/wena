@@ -1,7 +1,6 @@
-import { Template } from "aws-cdk-lib/assertions";
+import { Template, Match } from "aws-cdk-lib/assertions";
 import { PackageStorageStack } from "../../src/stacks/package-storage-stack";
 import { App } from "aws-cdk-lib";
-import { getStackSuffix } from "../../src/utils";
 
 describe("Package Storage Stack", () => {
     let template: Template;
@@ -16,13 +15,52 @@ describe("Package Storage Stack", () => {
 
     it("should create a bucket for test packages", () => {
         template.hasResourceProperties("AWS::S3::Bucket",{
-            BucketName: `test-packages-${getStackSuffix(packageStorageStack)}`
+            BucketName: Match.objectEquals({
+                "Fn::Join": [
+                "",
+                [
+                 "test-packages-",
+                 {
+                  "Fn::Select": [
+                   6,
+                   {
+                    "Fn::Split": [
+                     "-",
+                     {
+                      "Ref": "AWS::StackId"
+                     }
+                    ]
+                   }
+                  ]
+                 }
+                ]
+               ]})
         });
     });
 
     it("should create a bucket for node_modules", () => {
         template.hasResourceProperties("AWS::S3::Bucket", {
-            BucketName: `node-modules-${getStackSuffix(packageStorageStack)}`
+            BucketName: Match.objectEquals({
+                "Fn::Join": [
+                    "",
+                    [
+                     "node-modules-",
+                     {
+                      "Fn::Select": [
+                       6,
+                       {
+                        "Fn::Split": [
+                         "-",
+                         {
+                          "Ref": "AWS::StackId"
+                         }
+                        ]
+                       }
+                      ]
+                    }
+                    ]
+                ]
+            })
         });
     });
 })

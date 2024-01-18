@@ -1,6 +1,6 @@
-import {Stack} from "aws-cdk-lib";
+import {Stack, Fn} from "aws-cdk-lib";
 
 
 export const getStackSuffix = (stack: Stack) => {
- return stack.stackId.split("")[6];
+ return Fn.select(6, Fn.split("-", stack.stackId));
 };

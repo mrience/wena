@@ -1,12 +1,12 @@
-import { Stack, StackProps, aws_s3 } from "aws-cdk-lib";
+import { Stack, StackProps, aws_s3, CfnOutput } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { getStackSuffix } from "../utils";
 
 export class PackageStorageStack extends Stack {
     constructor(construct: Construct, id: string, props?: StackProps){
         super(construct, id , props);
-
-        const stackSuffix = getStackSuffix(this);
+        
+        let stackSuffix = getStackSuffix(this);
 
         const testBucket = new aws_s3.Bucket(this, "TestPackagesBucket", {
             bucketName: `test-packages-${stackSuffix}`
