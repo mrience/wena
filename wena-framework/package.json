@@ -2,10 +2,10 @@
   "name": "@mrience/wena",
   "version": "1.0.11",
   "description": "Serverless e2e tests framework",
-  "main": "index.js",
-  "type": "module",
+  "main": "bin.ts",
   "scripts": {
-    "build": "tsc --build --verbose"
+    "build": "tsc --build --verbose tsconfig.build.json",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -21,12 +21,19 @@
   },
   "homepage": "https://github.com/mrience/wena#readme",
   "workspaces": [
-    "packages/wena-test-runner"
+    "packages/wena-test-runner",
+    "packages/serverless-services"
   ],
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
     "eslint": "^8.52.0",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2"
   }
 }
