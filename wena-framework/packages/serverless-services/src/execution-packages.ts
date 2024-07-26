@@ -27,7 +27,7 @@ export const uploadNodeModulesPackage = async (s3Client: S3Client) => {
         s3Client,
         {
         bucket: "node-modules-06076a666cf9",
-        type:PackageType.NodeModules
+        type: PackageType.NodeModules
     });
 };
 
@@ -95,7 +95,7 @@ const gethashFromDir = async (packageType: PackageType) => {
     return hash;
 };
 
-
+// FIXME: zip should exclude node_modules for tests package (now it takes all, because path is ./)
 const zipFolder = (packageType: PackageType) => {
     const workingDirPath = getWorkingDirectoryPath(packageType);
     const zip = new JSZip().folder(workingDirPath)?.generateNodeStream().read() as Buffer;

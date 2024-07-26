@@ -1,7 +1,6 @@
-import { Resource, Stack } from "aws-cdk-lib";
+import { Stack } from "aws-cdk-lib";
 import { LambdaIntegration, RestApi, RestApiProps } from "aws-cdk-lib/aws-apigateway";
 import { Construct } from "constructs";
-import { Interface } from "readline";
 
 export interface ApiStackProps extends RestApiProps {
     lambdaIntegration: LambdaIntegration;

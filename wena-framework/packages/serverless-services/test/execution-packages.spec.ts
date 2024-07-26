@@ -58,7 +58,7 @@ describe("execution packages", () => {
             mkdtemp(nodeModulesDir, () => {});            
         }
         s3mockClient
-        .on(GetObjectCommand)
+        .on(GetObjectCommand)                                                                                                                                                                                                                                        
         .resolves({})
         .on(PutObjectCommand)
         .resolves({});
