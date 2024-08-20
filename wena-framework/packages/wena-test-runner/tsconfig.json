@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "target": "es2017",
-        "module": "esnext",
+        "target": "ES2022",
+        "module": "ES2022",
         "moduleResolution": "node",
         "declaration": true,
         "strict": true,
@@ -9,10 +9,14 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "rootDir": "./src",
-        "outDir": "./dist",
         "composite": true,
-        "types": ["node"]
+        "types": ["node"],
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
     },
-    "include": ["src/**/*"]
+    "ts-node": {
+        "esm": true
+    },
+    "files": [],
+    "references": [{"path": "../serverless-services"}]
 }

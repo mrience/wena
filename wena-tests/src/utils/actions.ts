@@ -12,7 +12,6 @@ const click = async (selector: string) => {
     await driver.findElement(By.css(selector)).click();
 }
 
-
 const getText = async (selector: string) => {
     return driver.findElement(By.css(selector)).getText();
 }

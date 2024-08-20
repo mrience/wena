@@ -1,0 +1,8 @@
+POST https://fgxcc615dk.execute-api.eu-west-1.amazonaws.com/prod/frontend
+content-type: application/json
+
+{
+"s3TestPackageKey": "XvFDWCUQinD3kc5XCDMyOMqZPXY=",
+"s3NodeModulesPackageKey": "rGS0ADxbBvXqKgNWCLFRsObKB90="
+}
+

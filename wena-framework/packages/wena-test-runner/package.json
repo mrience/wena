@@ -2,20 +2,21 @@
   "name": "wena-test-runner",
   "version": "1.0.0",
   "description": "This package is responsible for building executable enabling wena-test-runner command",
-  "main": "dist/bin.js",
-  "types": "dist/bin.d.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "bin": {
-    "wena-test-runner": "./dist/bin.js"
+    "wena-test-runner": "./src/bin.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "execa": "^8.0.1"
+    "chalk": "^5.3.0",
+    "execa": "^8.0.1",
+    "log-symbols": "^6.0.0",
+    "serverless-services": "*"
   },
   "devDependencies": {
     "@types/node": "^20.8.10"

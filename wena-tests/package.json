@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@types/node": "^20.8.4",
+    "dotenv": "^16.4.5",
     "eslint": "^8.51.0",
     "selenium-webdriver": "^4.13.0"
   }
