@@ -13,7 +13,7 @@ type ExecutionPackage = {
 }
 
 
-export const uploadTestsPackage = async (s3Client: S3Client) => {
+const uploadTestsPackage = async (s3Client: S3Client) => {
     return await uploadExecutionPackage(
         s3Client,
         {
@@ -22,7 +22,7 @@ export const uploadTestsPackage = async (s3Client: S3Client) => {
     });
 };
 
-export const uploadNodeModulesPackage = async (s3Client: S3Client) => {
+const uploadNodeModulesPackage = async (s3Client: S3Client) => {
     return await uploadExecutionPackage(
         s3Client,
         {
@@ -46,7 +46,7 @@ const uploadExecutionPackage = async (s3Client: S3Client, executionPackage: Exec
     } catch (error) {
         const err = error as S3ServiceException;
         if (err.name == "NoSuchKey") {
-            const zippedPackage = zipFolder(executionPackage.type);
+            const zippedPackage = await zipFolder(executionPackage.type);
             const putObjectInput = {
                 Bucket: executionPackage.bucket,
                 Key: hash,
@@ -96,9 +96,11 @@ const gethashFromDir = async (packageType: PackageType) => {
 };
 
 // FIXME: zip should exclude node_modules for tests package (now it takes all, because path is ./)
-const zipFolder = (packageType: PackageType) => {
+const zipFolder = async (packageType: PackageType) => {
     const workingDirPath = getWorkingDirectoryPath(packageType);
-    const zip = new JSZip().folder(workingDirPath)?.generateNodeStream().read() as Buffer;
+    const zip = await (new JSZip().folder(workingDirPath)?.generateAsync({type: "nodebuffer"}));
 
     return zip;
 };
+
+export {uploadTestsPackage, uploadNodeModulesPackage, zipFolder, PackageType }

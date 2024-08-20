@@ -1,8 +1,6 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context, Handler } from 'aws-lambda';
 import {execa} from 'execa';
-import { unzip } from 'zlib';
-import { read, readFileSync } from 'fs';
 import JSZip = require('jszip');
 import { NodeJsClient } from "@smithy/types";
 
@@ -17,38 +15,52 @@ interface FrontendAPIEventBody {
 export const handler: Handler = async (event: APIGatewayProxyEvent, context: Context) =>  {
 
   const eventBody = JSON.parse(event.body as string);
-    //dostarczam hashe przez api gateway event
 
-    const s3TestPackageKey = eventBody.s3TestPackageKey;
-    const s3NodeModulesPackageKey = eventBody.s3NodeModulesPackageKey;
+  let { stdout } = await execa('ls', ['-la', '/tmp']);
+  console.log('Files in /tmp:', stdout);
 
     // pobieram testy i obiekty z s3 i rozpakowuje
     const s3GetTestPackageCommand = new GetObjectCommand({
       Bucket: "test-packages-06076a666cf9",
-      Key: s3TestPackageKey
+      Key: eventBody.s3TestPackageKey
     });
     const s3GetNodeModulesPackageCommand = new GetObjectCommand({
       Bucket: "node-modules-06076a666cf9",
-      Key: s3NodeModulesPackageKey
+      Key: eventBody.s3NodeModulesPackageKey
     });
-    // odpalam komendy
-    const zippedTestPackage = (await s3Client.send(s3GetTestPackageCommand)).Body as NodeJS.ReadableStream;
-    const zipedNodeModulesPackage = (await s3Client.send(s3GetNodeModulesPackageCommand)).Body as NodeJS.ReadableStream;
+
+    await execa `cd /tmp/ `;
+
+    await execa `ls`;
+
+    // pobieram paczki z s3
+    const zippedTestPackageStream = (await s3Client.send(s3GetTestPackageCommand)).Body as NodeJS.ReadableStream;
+    // const zipedNodeModulesPackageStream = (await s3Client.send(s3GetNodeModulesPackageCommand)).Body as NodeJS.ReadableStream;
+    const zippedTestPackageBuffer = await streamToBuffer(zippedTestPackageStream);
+    // const zipedNodeModulesPackageBuffer = await streamToBuffer(zipedNodeModulesPackageStream);
     const jszip = new JSZip();
-    jszip.loadAsync(zippedTestPackage);
-    jszip.loadAsync(zipedNodeModulesPackage);
+    // rozpakowuję paczkę
+    const file = await jszip.loadAsync(zippedTestPackageBuffer);
+    // jszip.loadAsync(zipedNodeModulesPackageBuffer);
 
+    await execa `cd ${eventBody.projectDirectory}`;
 
-    // unzip(readFileSync())
-
-    await execa `ls`
-
-    await execa`npm run jest`
+    await execa `npm run jest`
 
     const response: APIGatewayProxyResult = {
       statusCode: 201,
       body: JSON.stringify('hello from lambda')
     }
-    console.log(event)
+
     return response;
   };
+
+  function streamToBuffer(stream: NodeJS.ReadableStream): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      stream.on("data", (chunk => chunks.push(chunk)));
+      stream.on("end", () => {resolve(Buffer.concat(chunks))});
+      stream.on("error", reject);
+    });
+
+  }

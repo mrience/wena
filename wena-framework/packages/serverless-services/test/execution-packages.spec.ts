@@ -1,6 +1,6 @@
 import { mockClient } from "aws-sdk-client-mock";
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { uploadNodeModulesPackage, uploadTestsPackage } from '../src/execution-packages';
+import { PackageType, uploadNodeModulesPackage, uploadTestsPackage, zipFolder } from '../src/execution-packages';
 import 'aws-sdk-client-mock-jest';
 import {mkdtemp, existsSync} from 'fs';
 
@@ -12,6 +12,12 @@ describe("execution packages", () => {
 
     beforeEach(() => {
         s3mockClient.reset();
+    });
+
+    it("should create a zip", async () => {
+        const zip = await zipFolder(PackageType.Tests);
+        
+        expect(zip?.byteLength).toBeGreaterThan(0);
     });
 
     it("should return hash when a new package is uploaded", async () => {
