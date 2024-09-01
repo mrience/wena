@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node
 import Logger from './utils/logger.ts';
-import { uploadTestsPackage } from "serverless-services";
+import { uploadTestsPackage } from "../src/execution-packages.ts";
 import{ S3Client } from "@aws-sdk/client-s3";
 import axios from "axios";
 import * as dotenv from 'dotenv'; 

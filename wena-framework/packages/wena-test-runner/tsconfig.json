@@ -10,7 +10,7 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "composite": true,
-        "types": ["node"],
+        "types": ["node", "jest"],
         "allowImportingTsExtensions": true,
         "noEmit": true,
     },
