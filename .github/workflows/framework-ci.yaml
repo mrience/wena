@@ -1,0 +1,23 @@
+name: framework ci
+
+on:
+  push:
+    branches: [ main ]
+    paths: wena-framework/**
+  workflow_dispatch:
+
+jobs:
+  unit-tests:
+  - uses: actions/checkout@v4
+  - uses: actions/setup-node@v4
+    with:
+      node-version: 18
+  - name: run unit tests
+  run: |
+    npm ci
+    npm run test
+
+  wena_e2e_tests:
+    name: "E2e tests"
+    uses: mrience/wena/.github/workflows/wena-e2e-tests.yaml@main
+
