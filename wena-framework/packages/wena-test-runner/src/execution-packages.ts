@@ -1,15 +1,17 @@
 import { hashElement } from "folder-hash";
 import { GetObjectCommand, PutObjectCommand, S3Client, S3ServiceException } from "@aws-sdk/client-s3";
-import JSZip from "jszip";
+import archiver from "archiver";
+import Logger from "./utils/logger";
+import * as stream from 'stream';
 
 enum PackageType {
     NodeModules = "NodeModules",
-    Tests = "Tests"
+    Tests = "Tests",
 }
 
 type ExecutionPackage = {
     bucket: string,
-    type: PackageType
+    type: PackageType,
 }
 
 
@@ -33,12 +35,12 @@ const uploadNodeModulesPackage = async (s3Client: S3Client) => {
 
 
 const uploadExecutionPackage = async (s3Client: S3Client, executionPackage: ExecutionPackage) => {
+    const folderPath = getWorkingDirectoryPath(executionPackage.type);
     const hash = await gethashFromDir(executionPackage.type);
-
     const getObjectInput = {
         Bucket: executionPackage.bucket,
         Key: hash
-    }
+    };
     const getObjectCommand = new GetObjectCommand(getObjectInput);
     try {
         await s3Client.send(getObjectCommand);
@@ -46,18 +48,19 @@ const uploadExecutionPackage = async (s3Client: S3Client, executionPackage: Exec
     } catch (error) {
         const err = error as S3ServiceException;
         if (err.name == "NoSuchKey") {
-            const zippedPackage = await zipFolder(executionPackage.type);
-            const putObjectInput = {
-                Bucket: executionPackage.bucket,
-                Key: hash,
-                Body: zippedPackage
+            try {
+                const archiveStream = new stream.PassThrough();
+                uploadZipToS3(s3Client, executionPackage.bucket, hash, archiveStream);
+                const archive = archiver('zip', { zlib: { level: 9 } });
+                archive.on('error', (err) => {
+                    throw err;
+                });
+                archive.pipe(archiveStream);
+                archive.directory(folderPath, false);
+                await archive.finalize();
+            } catch(error) {
+                Logger.error(`Error during compression of ${executionPackage.type} package \n ${error}`);
             }
-            // Instead of PutObjectCommant we could use Upload class from @aws-sdk/lib-storage
-            // that can perform pararell upload. Unfortunatelly it does not work for some reason. 
-            // More at https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-lib-storage/
-            const putObjectCommand = new PutObjectCommand(putObjectInput);
-            
-            await s3Client.send(putObjectCommand);
             return hash;
         } else {
             throw error;
@@ -78,29 +81,38 @@ const getWorkingDirectoryPath = (packageType: PackageType) => {
             break;
         }
     }
-    return workingDirPath;
+    return `${__dirname}/${workingDirPath}`;
 };
 
-const gethashFromDir = async (packageType: PackageType) => {
-    const workingDirPath = getWorkingDirectoryPath(packageType);
+const gethashFromDir = async (folderPath: string) => {
     const includedFiles = process.platform === "win32"? ["**.js", "**.json", "**.ts"]
         : ["*.js", "**/*.js", "*.json", "**/*.json", "*.ts", "**/*.ts"];
-    const excludedDirs = packageType == PackageType.NodeModules ? ["node_modules"] : []; 
+    const excludedDirs = folderPath.endsWith("node_modules") ? ["node_modules"] : []; 
     const options = {
         files: {include: includedFiles},
         folders: {exclude: excludedDirs}
     };
-    const hash = (await hashElement(workingDirPath, options)).hash;
+    const hash = (await hashElement(folderPath, options)).hash;
 
     return hash;
 };
 
-// FIXME: zip should exclude node_modules for tests package (now it takes all, because path is ./)
-const zipFolder = async (packageType: PackageType) => {
-    const workingDirPath = getWorkingDirectoryPath(packageType);
-    const zip = await (new JSZip().folder(workingDirPath)?.generateAsync({type: "nodebuffer"}));
 
-    return zip;
+const uploadZipToS3 = async (s3Client: S3Client, bucket: string, key: string, stream: stream.PassThrough): Promise<void> => {
+    const command = new PutObjectCommand({
+        Bucket: bucket,
+        Key: key,
+        Body: stream,
+        ContentType: "application/zip",
+    });
+
+    try {
+        const response = await s3Client.send(command);
+        Logger.info(`Package uploaded successfully. ${response}`);
+    } catch (error) {
+        Logger.error(`Error uploading package:, ${error}`);
+    }
+
 };
 
-export {uploadTestsPackage, uploadNodeModulesPackage, zipFolder, PackageType }
+export {uploadTestsPackage, uploadNodeModulesPackage, PackageType }

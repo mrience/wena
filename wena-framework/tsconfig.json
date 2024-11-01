@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
       "incremental": true,
-      "target": "ES2020",
-      "module": "CommonJS",
+      "target": "ES2022",
+      "module": "ESNext",
       "declaration": true,
       "strict": true,
       "moduleResolution": "node",
@@ -10,17 +10,20 @@
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true,
       "types": ["jest"],
+      "resolveJsonModule": true,
+      "allowJs": true,
       "paths": {
         "*": ["./packages/*"]
       }
     },
+    "ts-node": {
+      "esm": true                
+    },
     "include": ["src/**/*"],
+    "exclude": ["node_modules"],
     "references": [
       {
         "path": "./packages/wena-test-runner"
-      },
-      {
-        "path": "./packages/serverless-services"
-      },
+      }
     ]
   }

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES2022",
-        "module": "ES2022",
+        "module": "ESNext",
         "moduleResolution": "node",
         "declaration": true,
         "strict": true,
@@ -13,8 +13,10 @@
         "types": ["node", "jest"],
         "allowImportingTsExtensions": true,
         "noEmit": true,
+        "allowJs": true
     },
     "ts-node": {
         "esm": true
-    }
+    },
+    "exclude": ["node_modules"]
 }
