@@ -1,7 +1,7 @@
 name: publish framework npm package
 
 on:
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   publish_wena_test_runner:
