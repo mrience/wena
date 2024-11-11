@@ -1,106 +1,125 @@
 import { hashElement } from "folder-hash";
-import { GetObjectCommand, PutObjectCommand, S3Client, S3ServiceException } from "@aws-sdk/client-s3";
-import JSZip from "jszip";
+import { GetObjectCommand, S3Client, S3ServiceException } from "@aws-sdk/client-s3";
+import archiver from "archiver";
+import Logger from "./utils/logger";
+import * as stream from 'stream';
+import { Upload } from "@aws-sdk/lib-storage";
 
 enum PackageType {
     NodeModules = "NodeModules",
-    Tests = "Tests"
+    Tests = "Tests",
 }
 
-type ExecutionPackage = {
+type ZipUploadOptions = {
     bucket: string,
-    type: PackageType
+    key: string,
+    type: PackageType,
+    path: string
 }
 
+type S3ObjectKey = string;
 
-const uploadTestsPackage = async (s3Client: S3Client) => {
+type PackageOptions = Pick<ZipUploadOptions, 'bucket'| 'type' | 'path'>;
+
+
+const uploadTestsPackage = async (s3Client: S3Client, path: string) => {
     return await uploadExecutionPackage(
         s3Client,
         {
         bucket: "test-packages-06076a666cf9",
-        type: PackageType.Tests
+        type: PackageType.Tests,
+        path: path
     });
 };
 
-const uploadNodeModulesPackage = async (s3Client: S3Client) => {
+const uploadNodeModulesPackage = async (s3Client: S3Client, path: string) => {
     return await uploadExecutionPackage(
         s3Client,
         {
         bucket: "node-modules-06076a666cf9",
-        type: PackageType.NodeModules
+        type: PackageType.NodeModules,
+        path: path
     });
 };
 
 
-const uploadExecutionPackage = async (s3Client: S3Client, executionPackage: ExecutionPackage) => {
-    const hash = await gethashFromDir(executionPackage.type);
-
+const uploadExecutionPackage = async (s3Client: S3Client, packageOptions: PackageOptions): Promise<S3ObjectKey> => {
+    const zipUploadOptions: ZipUploadOptions = {
+            ...packageOptions,
+            key: await getBase64UrlHashFromDir(packageOptions.path)
+    };
     const getObjectInput = {
-        Bucket: executionPackage.bucket,
-        Key: hash
-    }
+        Bucket: zipUploadOptions.bucket,
+        Key: zipUploadOptions.key
+    };
     const getObjectCommand = new GetObjectCommand(getObjectInput);
     try {
         await s3Client.send(getObjectCommand);
-        return hash;
+        return zipUploadOptions.key;
     } catch (error) {
         const err = error as S3ServiceException;
         if (err.name == "NoSuchKey") {
-            const zippedPackage = await zipFolder(executionPackage.type);
-            const putObjectInput = {
-                Bucket: executionPackage.bucket,
-                Key: hash,
-                Body: zippedPackage
+            try {
+                zipUploadOptions
+                await uploadZipToS3(s3Client, zipUploadOptions);
+            } catch(error) {
+                Logger.error(`Error during compression of ${zipUploadOptions.type} package \n ${error}`);
             }
-            // Instead of PutObjectCommant we could use Upload class from @aws-sdk/lib-storage
-            // that can perform pararell upload. Unfortunatelly it does not work for some reason. 
-            // More at https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-lib-storage/
-            const putObjectCommand = new PutObjectCommand(putObjectInput);
-            
-            await s3Client.send(putObjectCommand);
-            return hash;
+            return zipUploadOptions.key;
         } else {
             throw error;
         }
     }
 };
 
-const getWorkingDirectoryPath = (packageType: PackageType) => {
-    let workingDirPath: string;
 
-    switch(packageType) {
-        case PackageType.Tests: {
-            workingDirPath = ".";
-            break;
-        }
-        case PackageType.NodeModules: {
-            workingDirPath = "node_modules";
-            break;
-        }
-    }
-    return workingDirPath;
-};
-
-const gethashFromDir = async (packageType: PackageType) => {
-    const workingDirPath = getWorkingDirectoryPath(packageType);
+const getBase64UrlHashFromDir = async (folderPath: string) => {
     const includedFiles = process.platform === "win32"? ["**.js", "**.json", "**.ts"]
         : ["*.js", "**/*.js", "*.json", "**/*.json", "*.ts", "**/*.ts"];
-    const excludedDirs = packageType == PackageType.NodeModules ? ["node_modules"] : []; 
+    const excludedDirs = folderPath.endsWith("node_modules") ? ["node_modules"] : []; 
     const options = {
         files: {include: includedFiles},
         folders: {exclude: excludedDirs}
     };
-    const hash = (await hashElement(workingDirPath, options)).hash;
-
-    return hash;
+    const hash = (await hashElement(folderPath, options)).hash;
+    const base64UrlHash = Buffer.from(hash).toString('base64url');
+    return base64UrlHash;
 };
 
-// FIXME: zip should exclude node_modules for tests package (now it takes all, because path is ./)
-const zipFolder = async (packageType: PackageType) => {
-    const workingDirPath = getWorkingDirectoryPath(packageType);
-    const zip = await (new JSZip().folder(workingDirPath)?.generateAsync({type: "nodebuffer"}));
 
-    return zip;
+const uploadZipToS3 = async (s3Client: S3Client, options: ZipUploadOptions): Promise<void> => {
+    const archiverStream = new stream.PassThrough();
+    try {
+        const upload = new Upload({
+            client: s3Client, 
+            params: {
+                Bucket: options.bucket, 
+                Key: options.key, 
+                Body: archiverStream,
+                ContentType: "application/zip",
+            },
+        });
+        upload.on('httpUploadProgress', (progress) => {
+            Logger.info(`${options.type} package in progress: ${progress}`);
+        });
+
+        const archive = archiver('zip', { zlib: { level: 9 } });
+        archive.on('error', (err) => {
+            throw err;
+        });
+        if(options.type === PackageType.Tests) {
+            archive.directory(options.path, false, (entry) => {
+                return entry.name.includes('node_modules') ? false : entry;
+        });
+        } else { 
+            archive.directory(options.path, false);
+        }
+        archive.pipe(archiverStream);
+        await archive.finalize();
+        await upload.done();
+    } catch (error) {
+        throw error;
+    }
 };
 
-export {uploadTestsPackage, uploadNodeModulesPackage, zipFolder, PackageType }
+export {uploadTestsPackage, uploadNodeModulesPackage, PackageType }
