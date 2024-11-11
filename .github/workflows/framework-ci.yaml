@@ -1,6 +1,8 @@
 name: framework ci
 
 on:
+  pull_request:
+    paths: wena-framework/**
   push:
     branches: [ main ]
     paths: wena-framework/**
@@ -8,14 +10,17 @@ on:
 
 jobs:
   unit-tests:
-  - uses: actions/checkout@v4
-  - uses: actions/setup-node@v4
-    with:
-      node-version: 18
-  - name: run unit tests
-  run: |
-    npm ci
-    npm run test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - name: run unit tests
+      run: |
+        npm ci
+        npm run test
 
   wena_e2e_tests:
     name: "E2e tests"
