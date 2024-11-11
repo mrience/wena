@@ -1,51 +1,58 @@
 import { mockClient } from "aws-sdk-client-mock";
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { PackageType, uploadNodeModulesPackage, uploadTestsPackage, zipFolder } from '../src/execution-packages';
+import {uploadNodeModulesPackage, uploadTestsPackage } from '../src/execution-packages';
 import 'aws-sdk-client-mock-jest';
-import {mkdtemp, existsSync} from 'fs';
+
 
 describe("execution packages", () => {
     const s3Client = new S3Client();
     const s3mockClient = mockClient(s3Client);
     const error = new Error();
     error.name = "NoSuchKey";
+    const testProjectPath = "./packages/wena-test-runner/test/data/dummy_project";
 
     beforeEach(() => {
         s3mockClient.reset();
     });
 
-    it("should create a zip", async () => {
-        const zip = await zipFolder(PackageType.Tests);
-        
-        expect(zip?.byteLength).toBeGreaterThan(0);
-    });
-
-    it("should return hash when a new package is uploaded", async () => {
+    it("should return S3 bucket key for tests package", async () => {
         s3mockClient
             .on(GetObjectCommand)
             .rejects(error)
             .on(PutObjectCommand)
             .resolves({});
 
-        const hash = await uploadTestsPackage(s3Client);
+        const key = await uploadTestsPackage(s3Client , testProjectPath);
 
-        expect(hash).toBeTruthy();
-    });
+        expect(key).toEqual("ck5ZWDRDTXRKQmt0ZlhiZm8xMnFnZFU4cHRRPQ");
+    }, 180000);
 
-    it("should call aws methods when a package is uploaded", async () => {
+    it("should return S3 bucket key for node modules package", async () => {
         s3mockClient
             .on(GetObjectCommand)
             .rejects(error)
             .on(PutObjectCommand)
             .resolves({});
 
-        await uploadTestsPackage(s3Client);
+        const key = await uploadNodeModulesPackage(s3Client , `${testProjectPath}/node_modules`);
+
+        expect(key).toEqual("K3ZUOGR1M04yRkNDWEd1TUh5bW5pNnlEOEEwPQ");
+    });
+
+    it("should upload tests package", async () => {
+        s3mockClient
+            .on(GetObjectCommand)
+            .rejects(error)
+            .on(PutObjectCommand)
+            .resolves({});
+
+        await uploadTestsPackage(s3Client, testProjectPath);
 
         expect(s3mockClient).toHaveReceivedCommand(GetObjectCommand);
         expect(s3mockClient).toHaveReceivedCommand(PutObjectCommand);
     });
 
-    it.skip("should upload node modules package", async () => {
+    it("should upload node modules package", async () => {
         const error = new Error();
         error.name = "NoSuchKey";
 
@@ -55,26 +62,22 @@ describe("execution packages", () => {
         .on(PutObjectCommand)
         .resolves({});
 
-        await uploadNodeModulesPackage(s3Client);
+        await uploadNodeModulesPackage(s3Client, `${testProjectPath}/node_modules`);
 
         expect(s3mockClient).toHaveReceivedCommand(GetObjectCommand);
         expect(s3mockClient).toHaveReceivedCommand(PutObjectCommand);
     });
 
-    it("should not upload package when object exists", async () => {
-        const nodeModulesDir = './node_modules';
-        if(!existsSync(nodeModulesDir)) {
-            mkdtemp(nodeModulesDir, () => {});            
-        }
+    it("should not upload package when hash already exists", async () => {
         s3mockClient
         .on(GetObjectCommand)                                                                                                                                                                                                                                        
         .resolves({})
         .on(PutObjectCommand)
         .resolves({});
 
-        await uploadTestsPackage(s3Client);
+        await uploadTestsPackage(s3Client, testProjectPath);
 
         expect(s3mockClient).toHaveReceivedCommand(GetObjectCommand);
         expect(s3mockClient).toHaveReceivedCommandTimes(PutObjectCommand, 0);
-    });
+    }); 
 });
