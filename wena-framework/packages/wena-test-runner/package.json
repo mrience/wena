@@ -1,6 +1,6 @@
 {
   "name": "wena-test-runner",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "This package is responsible for building executable enabling wena-test-runner command",
   "type": "module",
   "scripts": {
