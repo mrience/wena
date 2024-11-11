@@ -8,11 +8,11 @@ export default class Logger {
     }
 
     static info(message: string) {
-        console.info(message);
+        console.info(pc.blue(`${message}`));
     }
 
     static warning(message: string) {
-        console.warn(message);
+        console.warn(pc.yellow(`${message}`));
     }
 
     static error(message: string) {
