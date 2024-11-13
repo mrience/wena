@@ -5,7 +5,7 @@ import 'aws-sdk-client-mock-jest';
 
 
 describe("execution packages", () => {
-    const s3Client = new S3Client();
+    const s3Client = new S3Client({region: "eu-west-1"});
     const s3mockClient = mockClient(s3Client);
     const error = new Error();
     error.name = "NoSuchKey";
