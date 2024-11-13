@@ -24,7 +24,7 @@ describe("execution packages", () => {
 
         const key = await uploadTestsPackage(s3Client , testProjectPath);
 
-        expect(key).toEqual("ck5ZWDRDTXRKQmt0ZlhiZm8xMnFnZFU4cHRRPQ");
+        expect(key).toEqual("Y1dFbGV1STNCL29EbnlmR3dBS3BFckxPY2c4PQ");
     }, 180000);
 
     it("should return S3 bucket key for node modules package", async () => {
@@ -36,7 +36,7 @@ describe("execution packages", () => {
 
         const key = await uploadNodeModulesPackage(s3Client , `${testProjectPath}/node_modules`);
 
-        expect(key).toEqual("K3ZUOGR1M04yRkNDWEd1TUh5bW5pNnlEOEEwPQ");
+        expect(key).toEqual("QVFybzBLaWNaOW8wT2Y5WE5Ld3J2Y01nd2swPQ");
     });
 
     it("should upload tests package", async () => {
