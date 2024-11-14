@@ -1,4 +1,4 @@
-name: framework ci
+name: Framework CI
 
 on:
   pull_request:
