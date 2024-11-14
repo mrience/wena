@@ -20,13 +20,31 @@ jobs:
 
     - uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: 22
     - name: run unit tests
       run: |
         npm ci
         npm run test
 
   wena_e2e_tests:
-    name: "E2e tests"
-    uses: mrience/wena/.github/workflows/wena-e2e-tests.yaml@main
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 22
+        registry-url: https://npm.pkg.github.com/
+        scope: '@mrience'
+
+    - name: Link wena-test-runner
+      run: |
+        cd wena-framework/packages/wena-test-runner
+        npm link
+    
+    - name: Run wena-test-runner
+      run: |
+        cd wena-tests
+        npm ci
+        npm link wena-test-runner
+        wena-test-runner
 
