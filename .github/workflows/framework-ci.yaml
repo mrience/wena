@@ -47,5 +47,5 @@ jobs:
         cd wena-tests
         npm ci
         npm link wena-test-runner
-        wena-test-runner
+        npx wena-test-runner
 
