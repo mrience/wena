@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env tsx
 import Logger from './utils/logger.ts';
 import { uploadTestsPackage, uploadNodeModulesPackage } from "../src/execution-packages.ts";
 import{ S3Client } from "@aws-sdk/client-s3";
