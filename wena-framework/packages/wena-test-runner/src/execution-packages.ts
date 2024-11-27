@@ -60,7 +60,6 @@ const uploadExecutionPackage = async (s3Client: S3Client, packageOptions: Packag
         const err = error as S3ServiceException;
         if (err.name == "NoSuchKey") {
             try {
-                zipUploadOptions
                 await uploadZipToS3(s3Client, zipUploadOptions);
             } catch(error) {
                 Logger.error(`Error during compression of ${zipUploadOptions.type} package \n ${error}`);
@@ -89,7 +88,6 @@ const getBase64UrlHashFromDir = async (folderPath: string) => {
 
 const uploadZipToS3 = async (s3Client: S3Client, options: ZipUploadOptions): Promise<void> => {
     const archiverStream = new stream.PassThrough();
-    try {
         const upload = new Upload({
             client: s3Client, 
             params: {
@@ -117,9 +115,6 @@ const uploadZipToS3 = async (s3Client: S3Client, options: ZipUploadOptions): Pro
         archive.pipe(archiverStream);
         await archive.finalize();
         await upload.done();
-    } catch (error) {
-        throw error;
-    }
 };
 
 export {uploadTestsPackage, uploadNodeModulesPackage, PackageType }
