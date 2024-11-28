@@ -1,9 +1,9 @@
-import { JestConfigWithTsJest, createDefaultEsmPreset } from 'ts-jest';
+import { JestConfigWithTsJest, createDefaultEsmPreset } from "ts-jest";
 
 const esmPreset = createDefaultEsmPreset();
 
 const jestConfig: JestConfigWithTsJest = {
-  ...esmPreset
+  ...esmPreset,
 };
 
-export default jestConfig
+export default jestConfig;
