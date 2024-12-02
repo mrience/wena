@@ -56,7 +56,6 @@ const uploadExecutionPackage = async (
         const getObjectCommand 
         
         
-        
         = new GetObjectCommand(getObjectInput    );
   try {
     await s3Client.send(getObjectCommand);
