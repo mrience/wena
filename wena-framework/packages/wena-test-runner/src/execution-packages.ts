@@ -54,7 +54,7 @@ const uploadExecutionPackage = async (
     Key: zipUploadOptions.key,
   };
     const  
-    getObjectCommand      = new GetObjectCommand(getObjectInput);
+    getObjectCommand  = new GetObjectCommand(getObjectInput);
   try {
     await s3Client.send(getObjectCommand);
     return zipUploadOptions.key;
