@@ -2,4 +2,5 @@
 
 npx lint-staged
 
+
 exit 1
