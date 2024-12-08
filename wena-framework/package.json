@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint .",
     "prettier": "prettier . --write --cache",
-    "prepare": "husky"
+    "prepare": "cd .. && husky wena-framework/.husky"
   },
   "repository": {
     "type": "git",
