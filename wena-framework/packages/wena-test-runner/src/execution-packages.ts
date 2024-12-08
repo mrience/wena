@@ -1,9 +1,5 @@
 import { hashElement } from "folder-hash";
-import {
-  GetObjectCommand,
-  S3Client,
-  S3ServiceException,
-} from "@aws-sdk/client-s3";
+import { GetObjectCommand, S3Client, S3ServiceException } from "@aws-sdk/client-s3";
 import archiver from "archiver";
 import Logger from "./utils/logger";
 import * as stream from "stream";
@@ -41,10 +37,7 @@ const uploadNodeModulesPackage = async (s3Client: S3Client, path: string) => {
   });
 };
 
-const uploadExecutionPackage = async (
-  s3Client: S3Client,
-  packageOptions: PackageOptions,
-): Promise<S3ObjectKey> => {
+const uploadExecutionPackage = async (s3Client: S3Client, packageOptions: PackageOptions): Promise<S3ObjectKey> => {
   const zipUploadOptions: ZipUploadOptions = {
     ...packageOptions,
     key: await getBase64UrlHashFromDir(packageOptions.path),
@@ -53,7 +46,7 @@ const uploadExecutionPackage = async (
     Bucket: zipUploadOptions.bucket,
     Key: zipUploadOptions.key,
   };
-    const getObjectCommand = new GetObjectCommand(getObjectInput);
+  const getObjectCommand = new GetObjectCommand(getObjectInput);
   try {
     await s3Client.send(getObjectCommand);
     return zipUploadOptions.key;
@@ -63,9 +56,7 @@ const uploadExecutionPackage = async (
       try {
         await uploadZipToS3(s3Client, zipUploadOptions);
       } catch (error) {
-        Logger.error(
-          `Error during compression of ${zipUploadOptions.type} package \n ${error}`,
-        );
+        Logger.error(`Error during compression of ${zipUploadOptions.type} package \n ${error}`);
       }
       return zipUploadOptions.key;
     } else {
@@ -79,9 +70,7 @@ const getBase64UrlHashFromDir = async (folderPath: string) => {
     process.platform === "win32"
       ? ["**.js", "**.json", "**.ts"]
       : ["*.js", "**/*.js", "*.json", "**/*.json", "*.ts", "**/*.ts"];
-  const excludedDirs = folderPath.endsWith("node_modules")
-    ? ["node_modules"]
-    : [];
+  const excludedDirs = folderPath.endsWith("node_modules") ? ["node_modules"] : [];
   const options = {
     files: { include: includedFiles },
     folders: { exclude: excludedDirs },
@@ -91,10 +80,7 @@ const getBase64UrlHashFromDir = async (folderPath: string) => {
   return base64UrlHash;
 };
 
-const uploadZipToS3 = async (
-  s3Client: S3Client,
-  options: ZipUploadOptions,
-): Promise<void> => {
+const uploadZipToS3 = async (s3Client: S3Client, options: ZipUploadOptions): Promise<void> => {
   const archiverStream = new stream.PassThrough();
   const upload = new Upload({
     client: s3Client,
