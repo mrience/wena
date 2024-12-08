@@ -1,29 +1,29 @@
 {
-    "compilerOptions": {
-      "incremental": true,
-      "target": "ES2022",
-      "module": "ESNext",
-      "declaration": true,
-      "strict": true,
-      "moduleResolution": "node",
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true,
-      "types": ["jest"],
-      "resolveJsonModule": true,
-      "allowJs": true,
-      "paths": {
-        "*": ["./packages/*"]
-      }
-    },
-    "ts-node": {
-      "esm": true                
-    },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules"],
-    "references": [
-      {
-        "path": "./packages/wena-test-runner"
-      }
-    ]
-  }
+  "compilerOptions": {
+    "incremental": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "declaration": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest"],
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "paths": {
+      "*": ["./packages/*"]
+    }
+  },
+  "ts-node": {
+    "esm": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "./packages/wena-test-runner"
+    }
+  ]
+}

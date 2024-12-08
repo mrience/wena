@@ -1,2 +1,1 @@
-console.log("dummy test log")
-
+console.log("dummy test log");

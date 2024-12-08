@@ -30,5 +30,9 @@
     "@types/axios": "^0.14.0",
     "@types/folder-hash": "^4.0.4",
     "aws-sdk-client-mock-jest": "^4.0.0"
+  },
+  "lint-staged": {
+    "*.{js, ts}": "eslint --cache --fix",
+    "*.{js, ts ,css,md}": "prettier --write"
   }
 }

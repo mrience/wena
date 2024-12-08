@@ -1,0 +1,12 @@
+wena-framework/node_modules
+wena-framework/tsconfig/tsbuildinfo
+wena-tests/node_modules
+dist/
+/workspace.xml
+wena-framework/packages/wena-test-runner/tsconfig.tsbuildinfo
+.vscode/
+*/tsconfig.tsbuildinfo
+wena-framework/packages/wena-test-runner/node_modules
+.env
+wena-infra/frontend.http
+**/.DS_Store
