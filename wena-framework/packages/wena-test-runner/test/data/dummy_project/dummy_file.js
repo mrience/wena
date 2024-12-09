@@ -1,1 +1,1 @@
-console.log("dummy file content")
+console.log("dummy file content");
