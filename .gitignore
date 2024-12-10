@@ -10,3 +10,4 @@ wena-framework/packages/wena-test-runner/node_modules
 .env
 wena-infra/frontend.http
 **/.DS_Store
+*/.eslintcache
