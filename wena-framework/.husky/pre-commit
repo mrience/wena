@@ -1,0 +1,2 @@
+cd wena-framework
+npx lint-staged

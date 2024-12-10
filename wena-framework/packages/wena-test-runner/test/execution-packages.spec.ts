@@ -1,13 +1,6 @@
 import { mockClient } from "aws-sdk-client-mock";
-import {
-  GetObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} from "@aws-sdk/client-s3";
-import {
-  uploadNodeModulesPackage,
-  uploadTestsPackage,
-} from "../src/execution-packages";
+import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { uploadNodeModulesPackage, uploadTestsPackage } from "../src/execution-packages";
 import "aws-sdk-client-mock-jest";
 
 describe("execution packages", () => {
@@ -22,11 +15,7 @@ describe("execution packages", () => {
   });
 
   it("should return S3 bucket key for tests package", async () => {
-    s3mockClient
-      .on(GetObjectCommand)
-      .rejects(error)
-      .on(PutObjectCommand)
-      .resolves({});
+    s3mockClient.on(GetObjectCommand).rejects(error).on(PutObjectCommand).resolves({});
 
     const key = await uploadTestsPackage(s3Client, testProjectPath);
 
@@ -34,26 +23,15 @@ describe("execution packages", () => {
   }, 180000);
 
   it("should return S3 bucket key for node modules package", async () => {
-    s3mockClient
-      .on(GetObjectCommand)
-      .rejects(error)
-      .on(PutObjectCommand)
-      .resolves({});
+    s3mockClient.on(GetObjectCommand).rejects(error).on(PutObjectCommand).resolves({});
 
-    const key = await uploadNodeModulesPackage(
-      s3Client,
-      `${testProjectPath}/node_modules`,
-    );
+    const key = await uploadNodeModulesPackage(s3Client, `${testProjectPath}/node_modules`);
 
     expect(key).toEqual("QVFybzBLaWNaOW8wT2Y5WE5Ld3J2Y01nd2swPQ");
   });
 
   it("should upload tests package", async () => {
-    s3mockClient
-      .on(GetObjectCommand)
-      .rejects(error)
-      .on(PutObjectCommand)
-      .resolves({});
+    s3mockClient.on(GetObjectCommand).rejects(error).on(PutObjectCommand).resolves({});
 
     await uploadTestsPackage(s3Client, testProjectPath);
 
@@ -65,11 +43,7 @@ describe("execution packages", () => {
     const error = new Error();
     error.name = "NoSuchKey";
 
-    s3mockClient
-      .on(GetObjectCommand)
-      .rejects(error)
-      .on(PutObjectCommand)
-      .resolves({});
+    s3mockClient.on(GetObjectCommand).rejects(error).on(PutObjectCommand).resolves({});
 
     await uploadNodeModulesPackage(s3Client, `${testProjectPath}/node_modules`);
 
@@ -78,11 +52,7 @@ describe("execution packages", () => {
   });
 
   it("should not upload package when hash already exists", async () => {
-    s3mockClient
-      .on(GetObjectCommand)
-      .resolves({})
-      .on(PutObjectCommand)
-      .resolves({});
+    s3mockClient.on(GetObjectCommand).resolves({}).on(PutObjectCommand).resolves({});
 
     await uploadTestsPackage(s3Client, testProjectPath);
 
