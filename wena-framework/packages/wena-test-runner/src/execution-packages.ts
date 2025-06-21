@@ -49,9 +49,6 @@ const uploadExecutionPackage = async (s3Client: S3Client, packageOptions: Packag
   const getObjectCommand = new GetObjectCommand(getObjectInput);
   try {
     await s3Client.send(getObjectCommand);
-    Logger.info(
-      `Package with key ${zipUploadOptions.key} already exists in S3 bucket ${zipUploadOptions.bucket}. No need to upload again.`,
-    );
     return zipUploadOptions.key;
   } catch (error) {
     const err = error as S3ServiceException;
@@ -61,7 +58,6 @@ const uploadExecutionPackage = async (s3Client: S3Client, packageOptions: Packag
       } catch (error) {
         Logger.error(`Error during compression of ${zipUploadOptions.type} package \n ${error}`);
       }
-      Logger.info(`Package with key ${zipUploadOptions.key} uploaded to S3 bucket ${zipUploadOptions.bucket}.`);
       return zipUploadOptions.key;
     } else {
       throw error;
@@ -86,7 +82,6 @@ const getBase64UrlHashFromDir = async (folderPath: string) => {
 
 const uploadZipToS3 = async (s3Client: S3Client, options: ZipUploadOptions): Promise<void> => {
   const archiverStream = new stream.PassThrough();
-
   const upload = new Upload({
     client: s3Client,
     params: {
@@ -96,38 +91,24 @@ const uploadZipToS3 = async (s3Client: S3Client, options: ZipUploadOptions): Pro
       ContentType: "application/zip",
     },
   });
-
-  upload.on("httpUploadProgress", () => {});
+  upload.on("httpUploadProgress", (progress) => {
+    Logger.info(`${options.type} package in progress: ${progress}`);
+  });
 
   const archive = archiver("zip", { zlib: { level: 9 } });
   archive.on("error", (err) => {
     throw err;
   });
-
-  archive.on("warning", function (err) {
-    if (err.code === "ENOENT") {
-      Logger.warning(`Warning: ${err.message}`);
-    } else {
-      throw err;
-    }
-  });
-
   if (options.type === PackageType.Tests) {
     archive.directory(options.path, false, (entry) => {
       return entry.name.includes("node_modules") ? false : entry;
     });
-  } else if (options.type === PackageType.NodeModules) {
+  } else {
     archive.directory(options.path, false);
   }
   archive.pipe(archiverStream);
-
-  archive.finalize();
-  try {
-    await upload.done();
-  } catch (error) {
-    Logger.error(`Error during upload of ${options.type} package: ${error}`);
-    throw error;
-  }
+  await archive.finalize();
+  await upload.done();
 };
 
 export { uploadTestsPackage, uploadNodeModulesPackage, PackageType };

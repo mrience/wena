@@ -16,11 +16,13 @@ const s3Client = new S3Client({
   region: process.env.AWS_REGION as string,
 });
 
-Logger.info("Uploading tests package...");
-const s3TestPackageKey = await uploadTestsPackage(s3Client, process.cwd());
+Logger.info("Uploading test packages...");
+const s3TestPackageKey = await uploadTestsPackage(s3Client, path.join(`${process.cwd()}/packages/wena-test-runner`));
 
-Logger.info("Uploading node modules package...");
-const s3NodeModulesPackageKey = await uploadNodeModulesPackage(s3Client, `${process.cwd()}/node_modules`);
+const s3NodeModulesPackageKey = await uploadNodeModulesPackage(
+  s3Client,
+  `${process.cwd()}/packages/wena-test-runner/node_modules`,
+);
 
 // call api gateway with the arns
 const response = await axios.post("https://fgxcc615dk.execute-api.eu-west-1.amazonaws.com/prod/frontend", {
