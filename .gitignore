@@ -11,3 +11,17 @@ wena-framework/packages/wena-test-runner/node_modules
 wena-infra/frontend.http
 **/.DS_Store
 */.eslintcache
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.backup
+.terraform/
+crash.log
+terraform.tfplan
+*.tfplan
+*.auto.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
