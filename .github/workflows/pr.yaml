@@ -25,5 +25,5 @@ jobs:
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan
       with:
-        tf-workspace: ${{ vars.TF_CLOUD_WORKSPACE }}
+        tf-workspace: ${{ vars.TF_WORKSPACE }}
 
