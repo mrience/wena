@@ -6,7 +6,7 @@ inputs:
     description: "The Terraform Cloud workspace to use for this plan."
   working-directory:
     required: false
-    default: "./wena-terraform"
+    default: "./"
     description: "The path to the Terraform configuration directory."
 
 runs:
