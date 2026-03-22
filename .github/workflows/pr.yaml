@@ -2,6 +2,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
     paths-ignore: "./wena-tests"
+  workflow_dispatch:
 
 permissions:
   # so GitHub can check out this repo using the default github.token
