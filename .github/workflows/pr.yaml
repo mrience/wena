@@ -1,0 +1,20 @@
+on:
+  pull_request:
+    paths-ignore: "./wena-tests"
+
+env:
+  TF_CLOUD_ORGANIZATION: ${{vars.TF_CLOUD_ORGANIZATION}}
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  CONFIG_DIRECTORY: "./wena-terraform"
+  ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+    - name: Terraform Plan
+      uses: ./.github/actions/terraform-plan/action.yaml
+      with:
+        tf-workspace: ${{ vars.TF_CLOUD_WORKSPACE }}
+
