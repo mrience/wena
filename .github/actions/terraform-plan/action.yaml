@@ -21,9 +21,6 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v 6.0.2
-
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@bff80f5420b44028d4a0cca9a7b77846d35ddc17 # v1.3.2
         id: plan-upload

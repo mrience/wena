@@ -9,10 +9,14 @@ env:
   ENVIRONMENT: ${{ vars.ENVIRONMENT }}
 
 jobs:
+
   terraform-plan:
     runs-on: ubuntu-latest
     environment: dev
     steps:
+    - name: Checkout
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v 6.0.2
+    
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan/action.yaml
       with:
