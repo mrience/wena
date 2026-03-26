@@ -4,7 +4,7 @@ inputs:
   tf-workspace:
     required: true
     description: "The Terraform Cloud workspace to use for this plan."
-  working-directory:
+  config-directory:
     required: false
     default: "./"
     description: "The path to the Terraform configuration directory."
@@ -17,7 +17,7 @@ runs:
       id: plan-upload
       with:
         workspace: ${{ inputs.tf-workspace }}
-        directory: ${{ inputs.working-directory }}
+        directory: ${{ inputs.config-directory }}
         speculative: true
 
     - name: Create Plan Run
