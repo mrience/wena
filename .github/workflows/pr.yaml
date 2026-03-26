@@ -1,7 +1,8 @@
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
-    paths-ignore: "./wena-tests"
+    paths-ignore:
+      - "wena-tests/**"
   workflow_dispatch:
 
 permissions:
