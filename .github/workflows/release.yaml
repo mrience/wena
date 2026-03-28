@@ -1,13 +1,10 @@
 on:
   push:
     branches: [main]
-  workflow_dispatch:
-  
 
 permissions:
   # so GitHub can check out this repo using the default github.token
   contents: read
-  pull-requests: write
 
 env:
   TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
@@ -16,7 +13,7 @@ env:
 
 jobs:
   deploy:
-    name: Wena infrastracture deployment to ${{ matrix.environment }} environment
+    name: Wena infrastructure deployment to ${{ matrix.environment }} environment
     runs-on: ubuntu-latest
     strategy:
       matrix:
