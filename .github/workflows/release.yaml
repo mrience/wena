@@ -1,8 +1,8 @@
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, labeled]
-    paths-ignore:
-      - "wena-tests/**"
+  push:
+    branches: [main]
+  workflow_dispatch:
+  
 
 permissions:
   # so GitHub can check out this repo using the default github.token
@@ -15,9 +15,15 @@ env:
   CONFIG_DIRECTORY: "./"
 
 jobs:
-  terraform-plan:
+  deploy:
+    name: Wena infrastracture deployment to ${{ matrix.environment }} environment
     runs-on: ubuntu-latest
-    environment: dev
+    strategy:
+      matrix:
+        environment: [dev, prod]
+
+    environment: ${{ matrix.environment }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v 6.0.2
@@ -27,3 +33,9 @@ jobs:
       with:
         tf-workspace: ${{ vars.TF_WORKSPACE }}
 
+    - name: Terraform Apply
+      uses: ./.github/actions/terraform-apply
+      with:
+        tf-workspace: ${{ vars.TF_WORKSPACE }}
+
+  
