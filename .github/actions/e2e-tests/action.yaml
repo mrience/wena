@@ -1,0 +1,22 @@
+name: Wena E2E Tests
+
+inputs:
+  environment:
+    description: 'Environment to run tests in'
+    required: false
+    default: 'dev'
+
+runs:
+  using: composite
+  steps:
+    - name: Link wena-test-runner
+      run: |
+        cd wena-framework/packages/wena-test-runner
+        npm link
+    
+    - name: Run wena-test-runner
+      run: |
+        cd wena-tests
+        npm ci
+        npm link wena-test-runner
+        npx wena-test-runner
