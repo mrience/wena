@@ -19,7 +19,9 @@ env:
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
-    working-directory: wena-framework
+    defaults:
+      run:
+        working-directory: wena-framework
 
     steps:
     - name: Checkout
