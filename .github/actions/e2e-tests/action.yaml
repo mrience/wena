@@ -11,7 +11,9 @@ runs:
   steps:
     - name: Link wena-test-runner
       run: |
-        cd wena-framework/packages/wena-test-runner
+        cd wena-framework
+        npm ci
+        cd packages/wena-test-runner
         npm link
       shell: bash
     - name: Run wena-test-runner
