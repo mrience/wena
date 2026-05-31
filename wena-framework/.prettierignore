@@ -8,5 +8,4 @@ wena-framework/packages/wena-test-runner/tsconfig.tsbuildinfo
 */tsconfig.tsbuildinfo
 wena-framework/packages/wena-test-runner/node_modules
 .env
-wena-infra/frontend.http
 **/.DS_Store

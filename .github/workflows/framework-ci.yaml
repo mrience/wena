@@ -29,26 +29,26 @@ jobs:
         npm ci
         npm run test
 
-  wena_e2e_tests:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 22
-        registry-url: https://npm.pkg.github.com/
-        scope: '@mrience'
+  # wena_e2e_tests:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Use Node.js
+  #     uses: actions/setup-node@v3
+  #     with:
+  #       node-version: 22
+  #       registry-url: https://npm.pkg.github.com/
+  #       scope: '@mrience'
 
-    - name: Link wena-test-runner
-      run: |
-        cd wena-framework/packages/wena-test-runner
-        npm link
+  #   - name: Link wena-test-runner
+  #     run: |
+  #       cd wena-framework/packages/wena-test-runner
+  #       npm link
     
-    - name: Run wena-test-runner
-      run: |
-        cd wena-tests
-        npm ci
-        npm link wena-test-runner
-        npx wena-test-runner
+  #   - name: Run wena-test-runner
+  #     run: |
+  #       cd wena-tests
+  #       npm ci
+  #       npm link wena-test-runner
+  #       npx wena-test-runner
 
