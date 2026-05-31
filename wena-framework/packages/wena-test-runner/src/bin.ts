@@ -13,7 +13,7 @@ const s3Client = new S3Client({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   },
-  region: process.env.AWS_REGION as string,
+  region: "eu-west-1",
 });
 
 Logger.info("Uploading tests package...");

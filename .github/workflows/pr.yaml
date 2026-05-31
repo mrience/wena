@@ -3,6 +3,7 @@ on:
     types: [opened, synchronize, reopened, labeled]
     paths-ignore:
       - "wena-tests/**"
+  workflow_dispatch:
 
 permissions:
   # so GitHub can check out this repo using the default github.token
@@ -13,9 +14,32 @@ env:
   TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   CONFIG_DIRECTORY: "./"
+  HUSKY: 0
 
 jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: wena-framework
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v 6.0.2
+
+    - name: Use Node.js
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f #v6.3.0
+      with:
+        node-version: 22
+        registry-url: https://npm.pkg.github.com/
+        scope: '@mrience'
+    - name: Run unit tests
+      run: |
+        npm ci
+        npm run test
+
   terraform-plan:
+    needs: unit-tests
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -27,3 +51,22 @@ jobs:
       with:
         tf-workspace: ${{ vars.TF_WORKSPACE }}
 
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: terraform-plan
+    environment: dev
+    steps:
+    - name: Checkout
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v 6.0.2
+    
+    - name: Use Node.js
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f #v6.3.0
+      with:
+        node-version: 22
+        registry-url: https://npm.pkg.github.com/
+        scope: '@mrience'
+
+    # - name: Run E2E Tests
+    #   uses: ./.github/actions/e2e-tests
+    #   with:
+    #     environment: dev
