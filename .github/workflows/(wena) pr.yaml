@@ -3,6 +3,7 @@ on:
     types: [opened, synchronize, reopened, labeled]
     paths-ignore:
       - "wena-tests/**"
+      - "wena-terraform/identity/**"
   workflow_dispatch:
 
 permissions:
