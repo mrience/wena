@@ -1,4 +1,11 @@
+variable "aws_region" {
+  description = "The AWS region to deploy resources in"
+  default     = "eu-west-1"
+}
 
+provider "aws" {
+  region  = var.aws_region
+}
  
 resource "aws_iam_openid_connect_provider" "oidc_provider" {
   url = "https://token.actions.githubusercontent.com"
