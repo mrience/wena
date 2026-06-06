@@ -1,9 +1,9 @@
 on:
   push:
     branches: [main]
-        paths-ignore:
-          - "wena-tests/**"
-          - "wena-terraform/identity/**"
+    paths-ignore:
+      - "wena-tests/**"
+      - "wena-terraform/identity/**"
 
 permissions:
   # so GitHub can check out this repo using the default github.token
