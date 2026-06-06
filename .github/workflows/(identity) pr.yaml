@@ -22,4 +22,3 @@ jobs:
       uses: ./.github/actions/terraform-plan
       with:
         tf-workspace: ${{ vars.TF_WORKSPACE }}
-        config-directory: wena-terraform/identity
