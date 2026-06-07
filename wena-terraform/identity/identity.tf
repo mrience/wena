@@ -25,7 +25,7 @@ resource "aws_iam_openid_connect_provider" "oidc_provider" {
   ]
 }
 
-data "aws_iam_policy_document" "oidc_assume_role" {
+data "aws_iam_policy_document" "oidc_assume_role_policy" {
     statement {
         effect = "Allow"
     
@@ -51,7 +51,33 @@ data "aws_iam_policy_document" "oidc_assume_role" {
     }
 }
 
+variable "aws_account_id_dev" {
+  description = "The AWS account ID to deploy resources in"
+  default     = "072055530432"
+}
+
+variable "aws_account_id_prod" {
+  description = "The AWS account ID to deploy resources in"
+  default     = "558824711352"
+} 
+
+data "aws_iam_policy_document" "assume_deploy_roles_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    resources = [ 
+      "arn:aws:iam::${var.aws_account_id_dev}:role/wena-deploy",
+      "arn:aws:iam::${var.aws_account_id_prod}:role/wena-deploy"
+     ]
+  }
+}
+
 resource "aws_iam_role" "github_oidc_role" {
     name = "@GithubOidc"
-    assume_role_policy = data.aws_iam_policy_document.oidc_assume_role.json
+    assume_role_policy = data.aws_iam_policy_document.oidc_assume_role_policy.json
+}
+
+resource "aws_iam_role_policy" "assume_deploy_roles_policy_attachment" {
+    name = "assume-deploy-roles"
+    role = aws_iam_role.github_oidc_role.id
+    policy = data.aws_iam_policy_document.assume_deploy_roles_policy.json
 }
