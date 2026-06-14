@@ -6,11 +6,9 @@ on:
       - "wena-terraform/identity/**"
 
 permissions:
-  # so GitHub can check out this repo using the default github.token
   contents: read
 
 env:
-  TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
 
 jobs:
@@ -23,18 +21,20 @@ jobs:
 
     environment: ${{ matrix.environment }}
 
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: eu-west-1
+      TF_WORKSPACE: ${{ vars.TF_WORKSPACE }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v 6.0.2
     
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan
-      with:
-        tf-workspace: ${{ vars.TF_WORKSPACE }}
 
     - name: Terraform Apply
       uses: ./.github/actions/terraform-apply
-      with:
-        tf-workspace: ${{ vars.TF_WORKSPACE }}
 
   

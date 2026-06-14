@@ -9,7 +9,6 @@ permissions:
   pull-requests: write
   
 env:
-  TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   HUSKY: 0
 
@@ -25,4 +24,8 @@ jobs:
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan
       with:
-        tf-workspace: ${{ vars.TF_WORKSPACE }}
+        config-directory: wena-terraform/identity
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: eu-west-1

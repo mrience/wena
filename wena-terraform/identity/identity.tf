@@ -1,4 +1,11 @@
 terraform {
+    cloud {
+        organization = "wena"
+        workspaces {
+            name = "wena-aws-identity"
+        }
+    }
+
     required_providers {
         aws = {
         source  = "hashicorp/aws"
