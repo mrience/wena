@@ -49,7 +49,7 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b #v6.2.0
       with:
-        assume-role: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/@GithubOidc 
+        role-to-assume: arn:aws:iam::${{ env.AWS_IDENTITY_ACCOUNT_ID }}:role/@GithubOidc 
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Terraform Plan
