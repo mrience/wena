@@ -33,4 +33,5 @@ jobs:
       uses: ./.github/actions/terraform-plan
       with:
         config-directory: wena-terraform/identity
+        workspace: ${{ vars.TF_WORKSPACE }}
 
