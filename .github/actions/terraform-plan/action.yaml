@@ -5,7 +5,7 @@ inputs:
     required: false
     default: "wena-terraform"
     description: "The path to the Terraform configuration directory."
-  workspace:
+  tf-workspace:
     required: false
     description: "The Terraform Cloud workspace to select."
 
@@ -22,7 +22,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.config-directory }}
       env:
-        TF_WORKSPACE: ${{ inputs.workspace }}
+        TF_WORKSPACE: ${{ inputs.tf-workspace }}
 
     - name: Terraform Plan
       id: plan
@@ -30,7 +30,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.config-directory }}
       env:
-        TF_WORKSPACE: ${{ inputs.workspace }}
+        TF_WORKSPACE: ${{ inputs.tf-workspace }}
 
     - name: Update PR
       if: ${{ github.event_name == 'pull_request' }}

@@ -57,7 +57,7 @@ jobs:
       uses: ./.github/actions/terraform-plan
       with:
         config-directory: wena-terraform
-        workspace: ${{ vars.TF_WORKSPACE }}
+        tf-workspace: ${{ vars.TF_WORKSPACE }}
 
   e2e-tests:
     runs-on: ubuntu-latest

@@ -5,6 +5,9 @@ inputs:
     required: false
     default: "wena-terraform"
     description: "The path to the Terraform configuration directory."
+  tf-workspace:
+    required: false
+    description: "The Terraform Cloud workspace to select."
 
 runs:
     using: composite
@@ -18,8 +21,12 @@ runs:
         run: terraform init
         shell: bash
         working-directory: ${{ inputs.config-directory }}
+        env:
+          TF_WORKSPACE: ${{ inputs.tf-workspace }}
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -no-color
         shell: bash
         working-directory: ${{ inputs.config-directory }}
+        env:
+          TF_WORKSPACE: ${{ inputs.tf-workspace }}
