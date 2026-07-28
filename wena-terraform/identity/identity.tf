@@ -59,21 +59,28 @@ data "aws_iam_policy_document" "oidc_assume_role_policy" {
 }
 
 variable "aws_account_id_dev" {
-  description = "The AWS account ID to deploy resources in"
+  description = "Development AWS account ID to deploy resources in"
   default     = "072055530432"
 }
 
 variable "aws_account_id_prod" {
-  description = "The AWS account ID to deploy resources in"
+  description = "Production AWS account ID to deploy resources in"
   default     = "558824711352"
 } 
+
+variable "aws_account_id_identity" {
+  description = "Identity AWS account ID to deploy resources in"
+  default     = "586808671648"
+}
 
 data "aws_iam_policy_document" "assume_deploy_roles_policy" {
   statement {
     actions = ["sts:AssumeRole"]
     resources = [ 
       "arn:aws:iam::${var.aws_account_id_dev}:role/wena-deploy",
-      "arn:aws:iam::${var.aws_account_id_prod}:role/wena-deploy"
+      "arn:aws:iam::${var.aws_account_id_prod}:role/wena-deploy",
+      "arn:aws:iam::${var.aws_account_id_identity}:role/wena-deploy"
+
      ]
   }
 }
