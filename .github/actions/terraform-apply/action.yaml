@@ -1,35 +1,32 @@
 name: Terraform Apply
 
 inputs:
-  tf-workspace:
-    required: true
-    description: "The Terraform Cloud workspace to use for this apply."
   config-directory:
     required: false
-    default: "./"
+    default: "wena-terraform"
     description: "The path to the Terraform configuration directory."
+  tf-workspace:
+    required: false
+    description: "The Terraform Cloud workspace to select."
 
 runs:
     using: composite
     steps:
-      - name: Upload Configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@bff80f5420b44028d4a0cca9a7b77846d35ddc17 # v1.3.2
-        id: apply-upload
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.2.0
         with:
-          workspace: ${{ inputs.tf-workspace }}
-          directory: ${{ inputs.config-directory }}
+          cli_config_credentials_token: ${{ env.TF_API_TOKEN }}
 
-      - name: Create Apply Run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@bff80f5420b44028d4a0cca9a7b77846d35ddc17 # v1.3.2
-        id: apply-run
-        with:
-          workspace: ${{ inputs.tf-workspace }}
-          configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
+      - name: Terraform Init
+        run: terraform init
+        shell: bash
+        working-directory: ${{ inputs.config-directory }}
+        env:
+          TF_WORKSPACE: ${{ inputs.tf-workspace }}
 
-      - name: Apply
-        uses: hashicorp/tfc-workflows-github/actions/apply-run@bff80f5420b44028d4a0cca9a7b77846d35ddc17 # v1.3.2
-        if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
-        id: apply
-        with:
-          run: ${{ steps.apply-run.outputs.run_id }}
-          comment: "Apply Run from GitHub Actions CI ${{ github.sha }}"
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -no-color
+        shell: bash
+        working-directory: ${{ inputs.config-directory }}
+        env:
+          TF_WORKSPACE: ${{ inputs.tf-workspace }}
