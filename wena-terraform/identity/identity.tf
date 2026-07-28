@@ -80,7 +80,6 @@ data "aws_iam_policy_document" "assume_deploy_roles_policy" {
       "arn:aws:iam::${var.aws_account_id_dev}:role/wena-deploy",
       "arn:aws:iam::${var.aws_account_id_prod}:role/wena-deploy",
       "arn:aws:iam::${var.aws_account_id_identity}:role/wena-deploy"
-
      ]
   }
 }
