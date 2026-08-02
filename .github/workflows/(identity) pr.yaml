@@ -3,8 +3,8 @@ on:
         types: [opened, synchronize, reopened, labeled]
         paths:
             - "wena-terraform/identity/**"
-            - "/.github/workflows/(identity) release.yaml "
-            - "/.github/workflows/(identity) pr.yaml "
+            - ".github/workflows/(identity) release.yaml"
+            - ".github/workflows/(identity) pr.yaml"
 
 permissions:
   contents: read
