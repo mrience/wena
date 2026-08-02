@@ -24,7 +24,7 @@ jobs:
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v 6.0.2
     
     - name: Assume Github OIDC Role
-      uses: ./.github/actions/assume-aws-role;
+      uses: ./.github/actions/assume-aws-role
 
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan
