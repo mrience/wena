@@ -9,7 +9,6 @@ permissions:
   contents: read
   id-token: write
 
-
 env:
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
 
@@ -23,20 +22,15 @@ jobs:
 
     environment: ${{ matrix.environment }}
 
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: eu-west-1
-
     steps:
     - name: Checkout
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v 6.0.2
-    
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b #v6.2.0
+
+    - name: Assume Github OIDC Role
+      uses: ./.github/actions/assume-aws-role
       with:
-        role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/@GithubOidc 
-        aws-region: ${{ env.AWS_REGION }}
+        aws-account-id: ${{ vars.AWS_IDENTITY_ACCOUNT_ID }}
+        role-name: "@GithubOidc"
 
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan

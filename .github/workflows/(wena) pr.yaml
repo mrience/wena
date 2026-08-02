@@ -14,8 +14,6 @@ permissions:
 env:
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   HUSKY: 0
-  AWS_REGION: eu-west-1
-  AWS_IDENTITY_ACCOUNT_ID: 586808671648
 
 jobs:
   unit-tests:
@@ -47,11 +45,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
     
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b #v6.2.0
+    - name: Assume Github OIDC Role
+      uses: ./.github/actions/assume-aws-role
       with:
-        role-to-assume: arn:aws:iam::${{ env.AWS_IDENTITY_ACCOUNT_ID }}:role/@GithubOidc 
-        aws-region: ${{ env.AWS_REGION }}
+        aws-account-id: ${{ vars.AWS_IDENTITY_ACCOUNT_ID }}
+        role-name: "@GithubOidc"
 
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan
