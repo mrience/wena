@@ -1,18 +1,17 @@
 name: Assume AWS Role
-description: Assume an AWS Role. Defaults to the @GithubOidc role in the Identity account.
+description: Assume an AWS Role in the specified AWS account.
 inputs:
   aws-region:
     required: false
     default: eu-west-1
     description: "The AWS region to use."
   aws-account-id:
-    required: false
-    default: 586808671648
+    required: true
     description: "The AWS account ID to assume the role in."
   role-name:
-    required: false
-    default: "@GithubOidc"
-    description: "The name of the role to assume. Defaults to @GithubOidc."
+    required: true
+    description: "The name of the role to assume."
+
 
 runs:
   using: composite
