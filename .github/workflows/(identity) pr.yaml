@@ -2,7 +2,9 @@ on:
     pull_request:
         types: [opened, synchronize, reopened, labeled]
         paths:
-            - 'wena-terraform/identity/**'
+            - "wena-terraform/identity/**"
+            - "/.github/workflows/(identity) release.yaml "
+            - "/.github/workflows/(identity) pr.yaml "
 
 permissions:
   contents: read
