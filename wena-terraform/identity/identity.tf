@@ -32,7 +32,7 @@ resource "aws_iam_openid_connect_provider" "oidc_provider" {
   ]
 }
 
-data "aws_iam_policy_document" "oidc_assume_role_policy" {
+data "aws_iam_policy_document" "github_oidc_trust_policy" {
     statement {
         effect = "Allow"
     
@@ -73,24 +73,63 @@ variable "aws_account_id_identity" {
   default     = "586808671648"
 }
 
-data "aws_iam_policy_document" "assume_deploy_roles_policy" {
+data "aws_iam_policy_document" "github_oidc_role_permissions" {
   statement {
     actions = ["sts:AssumeRole"]
     resources = [ 
-      "arn:aws:iam::${var.aws_account_id_dev}:role/@wena-deploy",
-      "arn:aws:iam::${var.aws_account_id_prod}:role/@wena-deploy",
-      "arn:aws:iam::${var.aws_account_id_identity}:role/@wena-deploy"
+      "arn:aws:iam::${var.aws_account_id_dev}:role/@Deploy",
+      "arn:aws:iam::${var.aws_account_id_prod}:role/@Deploy",
+      "arn:aws:iam::${var.aws_account_id_identity}:role/@Deploy"
      ]
   }
 }
 
 resource "aws_iam_role" "github_oidc_role" {
     name = "@GithubOidc"
-    assume_role_policy = data.aws_iam_policy_document.oidc_assume_role_policy.json
+    assume_role_policy = data.aws_iam_policy_document.github_oidc_trust_policy.json
 }
 
-resource "aws_iam_role_policy" "assume_deploy_roles_policy_attachment" {
+resource "aws_iam_role_policy" "github_oidc_policy_attachment" {
     name = "assume-deploy-roles"
     role = aws_iam_role.github_oidc_role.id
-    policy = data.aws_iam_policy_document.assume_deploy_roles_policy.json
+    policy = data.aws_iam_policy_document.github_oidc_role_permissions.json
+}
+
+data "aws_iam_policy_document" "deploy_trust_policy" {
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = [aws_iam_role.github_oidc_role.arn]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+data "aws_iam_policy_document" "deploy_permissions" {
+  statement {
+    actions = [
+      "iam:CreateRole",
+      "iam:GetRole",
+      "iam:AttachRolePolicy",
+      "iam:PutRolePolicy",
+      "iam:TagRole",
+      "iam:PassRole",
+      "iam:UpdateAssumeRolePolicy"
+    ]
+    resources = [ 
+      "arn:aws:iam::${var.aws_account_id_identity}:role/*"
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "deploy_role_policy_attachment" {
+  name = "deploy-role-policy-attachment"
+  role = aws_iam_role.deploy_role.id
+  policy = data.aws_iam_policy_document.deploy_permissions.json
+}
+
+resource "aws_iam_role" "deploy_role" {
+  name = "@Deploy"
+  assume_role_policy = data.aws_iam_policy_document.deploy_trust_policy.json 
 }

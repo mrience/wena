@@ -32,6 +32,12 @@ jobs:
         aws-account-id: ${{ vars.AWS_IDENTITY_ACCOUNT_ID }}
         role-name: "@GithubOidc"
 
+    - name: Assume Deployment Role
+      uses: ./.github/actions/assume-aws-role
+      with:
+        aws-account-id: ${{ env.AWS_ACCOUNT_ID }}
+        role-name: "@Deploy"
+
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan
       with:
