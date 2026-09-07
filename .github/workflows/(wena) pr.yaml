@@ -56,6 +56,8 @@ jobs:
       with:
         config-directory: wena-terraform
         tf-workspace: ${{ vars.TF_WORKSPACE }}
+        environment: dev
+        
 
   e2e-tests:
     runs-on: ubuntu-latest

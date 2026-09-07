@@ -15,11 +15,6 @@ terraform {
     required_version = ">= 1.5.0"
 }
 
-variable "aws_region" {
-  description = "The AWS region to deploy resources in"
-  default     = "eu-west-1"
-}
-
 provider "aws" {
   region  = var.aws_region
 }
@@ -64,7 +59,7 @@ data "aws_iam_policy_document" "github_oidc_role_permissions" {
     resources = [ 
       "arn:aws:iam::${var.aws_account_id_dev}:role/@Deploy",
       "arn:aws:iam::${var.aws_account_id_prod}:role/@Deploy",
-      "arn:aws:iam::${var.aws_account_id_identity}:role/@Deploy"
+      "arn:aws:iam::${var.aws_account_id}:role/@Deploy"
      ]
   }
 }
@@ -107,7 +102,7 @@ data "aws_iam_policy_document" "deploy_permissions" {
       "iam:UpdateAssumeRolePolicy"
     ]
     resources = [ 
-      "arn:aws:iam::${var.aws_account_id_identity}:role/*"
+      "arn:aws:iam::${var.aws_account_id}:role/*"
     ]
   }
 }

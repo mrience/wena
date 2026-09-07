@@ -8,6 +8,9 @@ inputs:
   tf-workspace:
     required: false
     description: "The Terraform Cloud workspace to select."
+  environment:
+    required: true
+    description: "The environment to deploy resources in (identity, dev, prod)."
 
 runs:
   using: composite
@@ -26,7 +29,7 @@ runs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color -out=tfplan
+      run: terraform plan -no-color -out=tfplan -var-file="${{ inputs.environment }}.tfvars"
       shell: bash
       working-directory: ${{ inputs.config-directory }}
       env:

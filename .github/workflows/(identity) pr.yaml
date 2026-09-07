@@ -35,4 +35,5 @@ jobs:
       with:
         config-directory: wena-terraform/identity
         tf-workspace: ${{ vars.TF_WORKSPACE }}
+        environment: identity
 

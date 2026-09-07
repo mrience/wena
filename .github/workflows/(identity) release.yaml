@@ -39,11 +39,13 @@ jobs:
       with:
         config-directory: wena-terraform/identity
         tf-workspace: ${{ vars.TF_WORKSPACE }}
+        environment: identity
 
     - name: Terraform Apply
       uses: ./.github/actions/terraform-apply
       with:
         config-directory: wena-terraform/identity
         tf-workspace: ${{ vars.TF_WORKSPACE }}
+        environment: identity
 
   

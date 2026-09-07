@@ -42,10 +42,12 @@ jobs:
       uses: ./.github/actions/terraform-plan
       with:
         tf-workspace: ${{ vars.TF_WORKSPACE }}
+        environment: ${{ matrix.environment }}
 
     - name: Terraform Apply
       uses: ./.github/actions/terraform-apply
       with:
         tf-workspace: ${{ vars.TF_WORKSPACE }}
+        environment: ${{ matrix.environment }}
 
   
