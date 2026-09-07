@@ -92,13 +92,17 @@ data "aws_iam_policy_document" "deploy_trust_policy" {
 }
 
 data "aws_iam_policy_document" "deploy_permissions" {
+  
+  statement {
+    actions   = ["iam:CreateRole", "iam:TagRole"]
+    resources = ["*"]
+  }
+
   statement {
     actions = [
-      "iam:CreateRole",
       "iam:GetRole",
       "iam:AttachRolePolicy",
       "iam:PutRolePolicy",
-      "iam:TagRole",
       "iam:PassRole",
       "iam:UpdateAssumeRolePolicy"
     ]
