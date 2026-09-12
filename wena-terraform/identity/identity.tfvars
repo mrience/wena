@@ -1,2 +1,1 @@
-environment = "identity"
-aws_account_id = "072055530432"
+aws_account_id = "586808671648"

@@ -6,7 +6,7 @@ variable "aws_account_id_dev" {
 variable "aws_account_id_prod" {
   description = "Production AWS account ID to deploy resources in"
   default     = "558824711352"
-} 
+}
 
 variable "aws_account_id" {
   description = "Identity AWS account ID to deploy resources in"

@@ -37,6 +37,7 @@ jobs:
       with:
         aws-account-id: ${{ vars.AWS_ACCOUNT_ID }}
         role-name: "@Deploy"
+        role-chaining: "true"
 
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan

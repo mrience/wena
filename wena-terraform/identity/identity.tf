@@ -1,24 +1,24 @@
 terraform {
-    cloud {
-        organization = "wena"
-        workspaces {
-            name = "wena-aws-identity"
-        }
+  cloud {
+    organization = "wena"
+    workspaces {
+      name = "wena-aws-identity"
     }
+  }
 
-    required_providers {
-        aws = {
-        source  = "hashicorp/aws"
-        version = "~> 6.0"
-        }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
     }
-    required_version = ">= 1.5.0"
+  }
+  required_version = ">= 1.5.0"
 }
 
 provider "aws" {
-  region  = var.aws_region
+  region = var.aws_region
 }
- 
+
 resource "aws_iam_openid_connect_provider" "oidc_provider" {
   url = "https://token.actions.githubusercontent.com"
 
@@ -28,51 +28,56 @@ resource "aws_iam_openid_connect_provider" "oidc_provider" {
 }
 
 data "aws_iam_policy_document" "github_oidc_trust_policy" {
-    statement {
-        effect = "Allow"
-    
-        principals {
-        type        = "Federated"
-        identifiers = [aws_iam_openid_connect_provider.oidc_provider.arn]
-        }
-    
-        actions = ["sts:AssumeRoleWithWebIdentity"]
-        
-        condition {
-        test     = "StringEquals"
-        values   = ["sts.amazonaws.com"]
-        variable = "token.actions.githubusercontent.com:aud"
-        }
+  statement {
+    effect = "Allow"
 
-        condition {
-            test     = "StringLike"
-            variable = "token.actions.githubusercontent.com:sub"
-    
-            values = ["repo:mrience/wena:*"]
-        }
+    principals {
+      type        = "Federated"
+      identifiers = [aws_iam_openid_connect_provider.oidc_provider.arn]
     }
+
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    condition {
+      test     = "StringEquals"
+      values   = ["sts.amazonaws.com"]
+      variable = "token.actions.githubusercontent.com:aud"
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+
+      values = ["repo:mrience/wena:*"]
+    }
+  }
 }
 
 data "aws_iam_policy_document" "github_oidc_role_permissions" {
   statement {
     actions = ["sts:AssumeRole"]
-    resources = [ 
+    resources = [
       "arn:aws:iam::${var.aws_account_id_dev}:role/@Deploy",
       "arn:aws:iam::${var.aws_account_id_prod}:role/@Deploy",
       "arn:aws:iam::${var.aws_account_id}:role/@Deploy"
-     ]
+    ]
   }
 }
 
 resource "aws_iam_role" "github_oidc_role" {
-    name = "@GithubOidc"
-    assume_role_policy = data.aws_iam_policy_document.github_oidc_trust_policy.json
+  name               = "@GithubOidc"
+  assume_role_policy = data.aws_iam_policy_document.github_oidc_trust_policy.json
 }
 
 resource "aws_iam_role_policy" "github_oidc_policy_attachment" {
-    name = "assume-deploy-roles"
-    role = aws_iam_role.github_oidc_role.id
-    policy = data.aws_iam_policy_document.github_oidc_role_permissions.json
+  name   = "assume-deploy-roles"
+  role   = aws_iam_role.github_oidc_role.id
+  policy = data.aws_iam_policy_document.github_oidc_role_permissions.json
+}
+
+moved {
+  from = aws_iam_role_policy.assume_deploy_roles_policy_attachment
+  to   = aws_iam_role_policy.github_oidc_policy_attachment
 }
 
 data "aws_iam_policy_document" "deploy_trust_policy" {
@@ -87,21 +92,21 @@ data "aws_iam_policy_document" "deploy_trust_policy" {
 }
 
 data "aws_iam_policy_document" "deploy_permissions" {
-  
-  statement {
-    actions   = ["iam:CreateRole", "iam:TagRole"]
-    resources = ["*"]
-  }
 
   statement {
     actions = [
+      "iam:CreateRole",
+      "iam:TagRole",
       "iam:GetRole",
+      "iam:GetRolePolicy",
       "iam:AttachRolePolicy",
       "iam:PutRolePolicy",
+      "iam:DeleteRolePolicy",
+      "iam:DeleteRole",
       "iam:PassRole",
       "iam:UpdateAssumeRolePolicy"
     ]
-    resources = [ 
+    resources = [
       "arn:aws:iam::${var.aws_account_id}:role/*"
     ]
   }
@@ -115,17 +120,19 @@ data "aws_iam_policy_document" "deploy_permissions" {
       "iam:AddClientIDToOpenIDConnectProvider",
       "iam:RemoveClientIDFromOpenIDConnectProvider"
     ]
-    resources = ["*"]
-   }
+    resources = [
+      "arn:aws:iam::${var.aws_account_id}:oidc-provider/*"
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "deploy_role_policy_attachment" {
-  name = "deploy-role-policy-attachment"
-  role = aws_iam_role.deploy_role.id
+  name   = "deploy-role-policy-attachment"
+  role   = aws_iam_role.deploy_role.id
   policy = data.aws_iam_policy_document.deploy_permissions.json
 }
 
 resource "aws_iam_role" "deploy_role" {
-  name = "@Deploy"
-  assume_role_policy = data.aws_iam_policy_document.deploy_trust_policy.json 
+  name               = "@Deploy"
+  assume_role_policy = data.aws_iam_policy_document.deploy_trust_policy.json
 }
