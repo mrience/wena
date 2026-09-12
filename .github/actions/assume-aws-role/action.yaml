@@ -26,3 +26,4 @@ runs:
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/${{ inputs.role-name }}
         aws-region: ${{ inputs.aws-region }}
         role-chaining: ${{ inputs.role-chaining }}
+        role-skip-session-tagging: true
