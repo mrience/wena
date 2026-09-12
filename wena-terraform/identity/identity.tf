@@ -105,6 +105,18 @@ data "aws_iam_policy_document" "deploy_permissions" {
       "arn:aws:iam::${var.aws_account_id}:role/*"
     ]
   }
+
+  statement {
+    actions = [
+      "iam:CreateOpenIDConnectProvider",
+      "iam:DeleteOpenIDConnectProvider",
+      "iam:GetOpenIDConnectProvider",
+      "iam:UpdateOpenIDConnectProviderThumbprint",
+      "iam:AddClientIDToOpenIDConnectProvider",
+      "iam:RemoveClientIDFromOpenIDConnectProvider"
+    ]
+    resources = ["*"]
+   }
 }
 
 resource "aws_iam_role_policy" "deploy_role_policy_attachment" {
