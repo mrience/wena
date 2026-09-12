@@ -11,6 +11,10 @@ inputs:
   role-name:
     required: true
     description: "The name of the role to assume."
+  role-chaining:
+    required: false
+    default: "false"
+    description: "Chain from existing role credentials instead of the GitHub OIDC token."
 
 
 runs:
@@ -21,3 +25,5 @@ runs:
       with:
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/${{ inputs.role-name }}
         aws-region: ${{ inputs.aws-region }}
+        role-chaining: ${{ inputs.role-chaining }}
+        role-skip-session-tagging: true

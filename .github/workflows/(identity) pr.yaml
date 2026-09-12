@@ -30,9 +30,17 @@ jobs:
         aws-account-id: ${{ vars.AWS_IDENTITY_ACCOUNT_ID }}
         role-name: "@GithubOidc"
 
+    - name: Assume Deployment Role
+      uses: ./.github/actions/assume-aws-role
+      with:
+        aws-account-id: ${{ vars.AWS_IDENTITY_ACCOUNT_ID }}
+        role-name: "@Deploy"
+        role-chaining: "true"
+
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan
       with:
         config-directory: wena-terraform/identity
         tf-workspace: ${{ vars.TF_WORKSPACE }}
+        environment: identity
 
