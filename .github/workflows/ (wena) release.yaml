@@ -39,6 +39,12 @@ jobs:
         role-name: "@Deploy"
         role-chaining: "true"
 
+    - name: Temporary import @Deploy role
+      run: |
+        terraform import aws_iam_role.deploy_role '@Deploy'
+        terraform import aws_iam_role_policy.deploy_role_policy_attachment '@Deploy:deploy-role-policy-attachment'
+
+
     - name: Terraform Plan
       uses: ./.github/actions/terraform-plan
       with:
