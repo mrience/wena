@@ -103,7 +103,6 @@ data "aws_iam_policy_document" "deploy_permissions" {
       "iam:PutRolePolicy",
       "iam:DeleteRolePolicy",
       "iam:DeleteRole",
-      "iam:PassRole",
       "iam:UpdateAssumeRolePolicy"
     ]
     resources = [
@@ -135,4 +134,15 @@ resource "aws_iam_role_policy" "deploy_role_policy_attachment" {
 resource "aws_iam_role" "deploy_role" {
   name               = "@Deploy"
   assume_role_policy = data.aws_iam_policy_document.deploy_trust_policy.json
+}
+
+# Temporary: @Deploy was bootstrapped manually; import it instead of recreating. Remove after first apply on main.
+import {
+  to = aws_iam_role.deploy_role
+  id = "@Deploy"
+}
+
+import {
+  to = aws_iam_role_policy.deploy_role_policy_attachment
+  id = "@Deploy:deploy-role-policy-attachment"
 }
