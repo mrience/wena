@@ -38,14 +38,3 @@ resource "aws_iam_role_policy" "deploy_role_policy_attachment" {
   role   = aws_iam_role.deploy_role.id
   policy = data.aws_iam_policy_document.deploy_role_permissions.json
 }
-
-# Temporary: @Deploy was bootstrapped manually; import it instead of recreating. Remove after first apply on main.
-import {
-  to = aws_iam_role.deploy_role
-  id = "@Deploy"
-}
-
-import {
-  to = aws_iam_role_policy.deploy_role_policy_attachment
-  id = "@Deploy:deploy-role-policy-attachment"
-}
