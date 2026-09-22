@@ -1,18 +1,18 @@
 terraform {
-    cloud {
-        organization = "wena"
-        workspaces {
-            tags = ["wena-workload"]
-        }
+  cloud {
+    organization = "wena"
+    workspaces {
+      tags = ["wena-workload"]
     }
+  }
 
-    required_providers {
-        aws = {
-        source  = "hashicorp/aws"
-        version = "~> 6.0"
-        }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
     }
-    required_version = ">= 1.5.0"
+  }
+  required_version = ">= 1.5.0"
 }
 
 variable "aws_region" {
@@ -21,5 +21,5 @@ variable "aws_region" {
 }
 
 provider "aws" {
-  region  = var.aws_region
+  region = var.aws_region
 }
