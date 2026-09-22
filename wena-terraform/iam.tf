@@ -20,7 +20,6 @@ data "aws_iam_policy_document" "deploy_role_permissions" {
       "iam:PutRolePolicy",
       "iam:DeleteRolePolicy",
       "iam:DeleteRole",
-      "iam:PassRole",
       "iam:UpdateAssumeRolePolicy"
     ]
     resources = [
